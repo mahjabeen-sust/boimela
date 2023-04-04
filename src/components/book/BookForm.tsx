@@ -3,20 +3,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import Grid from '@mui/material/Grid'
 
 import AdminNav from '../admin/AdminNav'
-import type { AppDispatch } from '../../store'
+import type { AppDispatch, RootState } from '../../store'
 import { fetchBooksThunk, addNewBook } from '../../features/books/booksSlice'
+import { fetchAuthorsThunk } from '../../features/authors/authorsSlice'
 import Books from './Books'
 
 //mui
 import { TextField, FormControl, Button, InputLabel, Select, MenuItem } from '@mui/material'
 
 const BookForm = () => {
+  const { authors } = useSelector((state: RootState) => state)
+
   const [newBook, setNewBook] = useState({
     isbn: '',
     title: '',
     description: '',
     publisher: '',
-    authors: 'author1',
+    authors: '',
     status: true,
     borrowerId: '',
     publishDate: new Date(),
@@ -61,6 +64,7 @@ const BookForm = () => {
 
   useEffect(() => {
     dispatch(fetchBooksThunk())
+    dispatch(fetchAuthorsThunk())
   }, [])
 
   return (
@@ -142,9 +146,12 @@ const BookForm = () => {
               {/* <MenuItem value={newBook.authors} selected>
                 {newBook.authors}
               </MenuItem> */}
-              <MenuItem value="author1">Author1</MenuItem>
+              {authors.items.map((author) => (
+                <MenuItem value={author.authorName}>{author.authorName}</MenuItem>
+              ))}
+              {/* <MenuItem value="author1">Author1</MenuItem>
               <MenuItem value="author2">Author2</MenuItem>
-              <MenuItem value="author3">Author3</MenuItem>
+              <MenuItem value="author3">Author3</MenuItem> */}
             </Select>
 
             <InputLabel id="status-add-label">Status</InputLabel>

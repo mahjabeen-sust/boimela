@@ -40,7 +40,7 @@ const EditBook = () => {
   const bookToBeUpdated = books.items.find((book) => {
     if (book.isbn === updateBookIsbn) return book
   })
-  //console.log('bookToBeUpdated', bookToBeUpdated)
+  console.log('bookToBeUpdated', bookToBeUpdated)
 
   //handle edit
   const handleEdit = (isbn: string) => {

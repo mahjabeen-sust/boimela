@@ -13,12 +13,21 @@ import Grid from '@mui/material/Grid'
 export default function EditAuthorForm(props: Author) {
   const dispatch = useDispatch<AppDispatch>()
   const { authors } = useSelector((state: RootState) => state)
-  //console.log('author object length', Object.keys(authors.items).length)
+  //console.log('Received as props:', props)
 
   const [newAuthor, setNewAuthor] = useState({
     id: props.id,
     authorName: props.authorName
   })
+  if (newAuthor.id !== props.id) {
+    setNewAuthor((prev) => ({
+      ...prev,
+      id: props.id,
+      authorName: props.authorName
+    }))
+  }
+
+  //console.log('newAuthor from props:', newAuthor)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value

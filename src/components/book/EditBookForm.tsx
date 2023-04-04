@@ -29,7 +29,24 @@ function EditBookForm(props: Book) {
     returnDate: props.returnDate
   })
 
+  if (newBook.isbn !== props.isbn) {
+    setNewBook((prev) => ({
+      ...prev,
+      isbn: props.isbn,
+      title: props.title,
+      description: props.description,
+      publisher: props.publisher,
+      authors: props.authors,
+      status: props.status,
+      borrowerId: props.borrowerId,
+      publishDate: props.publishDate,
+      borrowDate: props.borrowDate,
+      returnDate: props.returnDate
+    }))
+  }
+
   //console.log('newBook: ', newBook)
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
     let name = e.target.name

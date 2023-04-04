@@ -14,18 +14,13 @@ export default function EditAuthor() {
   const dispatch = useDispatch<AppDispatch>()
   const { authors } = useSelector((state: RootState) => state)
   //console.log('author object length', Object.keys(authors.items).length)
+  const [isEdit, setIsEdit] = useState(false)
 
   const [updateAuthorId, setupdateAuthorId] = useState<null | number>()
   const authorToBeUpdated = authors.items.find((author) => {
     if (author.id === updateAuthorId) return author
   })
-  console.log('author to be updated', authorToBeUpdated)
-
-  //handle edit
-  const handleEdit = (id: number) => {
-    //alert(isbn)
-    setupdateAuthorId(id)
-  }
+  //console.log('author to be updated', authorToBeUpdated)
 
   useEffect(() => {
     dispatch(fetchAuthorsThunk())
@@ -46,7 +41,11 @@ export default function EditAuthor() {
             {authors.items.map((author) => (
               <li key={author.id}>
                 {author.authorName}
-                <Button size="small" onClick={() => handleEdit(author.id)}>
+                <Button
+                  size="small"
+                  onClick={() => {
+                    setupdateAuthorId(author.id)
+                  }}>
                   Edit
                 </Button>
                 <Button
@@ -60,32 +59,6 @@ export default function EditAuthor() {
             ))}
           </ul>
           {authorToBeUpdated && <EditAuthorForm {...authorToBeUpdated} />}
-          {/* author add form */}
-          {/* {authorToBeUpdated && (
-            <React.Fragment>
-              <form action="" className="authorEditForm" onSubmit={handleSubmit}>
-                <h2>Edit Author</h2>
-
-                <TextField
-                  label="Name"
-                  name="authorName"
-                  onChange={handleChange}
-                  required
-                  variant="outlined"
-                  color="secondary"
-                  type="text"
-                  sx={{ mb: 3 }}
-                  fullWidth
-                  value={authorToBeUpdated.authorName}
-                  placeholder="placeholder"
-                  //error={nameError}
-                />
-                <Button variant="outlined" color="secondary" type="submit">
-                  Submit
-                </Button>
-              </form>
-            </React.Fragment>
-          )} */}
         </Grid>
       </Grid>
     </div>
