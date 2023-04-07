@@ -12,7 +12,7 @@ import Grid from '@mui/material/Grid'
 export default function AuthorForm() {
   const dispatch = useDispatch<AppDispatch>()
   const { authors } = useSelector((state: RootState) => state)
-  console.log('author object length', Object.keys(authors.items).length)
+  //console.log('author object length', Object.keys(authors.items).length)
 
   const [newAuthor, setNewAuthor] = useState({
     id: Object.keys(authors.items).length + 1,

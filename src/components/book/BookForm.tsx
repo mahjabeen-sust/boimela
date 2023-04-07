@@ -22,9 +22,11 @@ const BookForm = () => {
     authors: '',
     status: true,
     borrowerId: '',
-    publishDate: new Date(),
-    borrowDate: new Date(),
-    returnDate: new Date()
+    publishDate: '',
+    //borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
+    borrowDate: null,
+    //returnDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/')
+    returnDate: null
   })
 
   const dispatch = useDispatch<AppDispatch>()
@@ -40,7 +42,8 @@ const BookForm = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-
+    console.log(newBook)
+    // return 1
     //from mui example
     setTitleError(false)
     setDescriptionError(false)
@@ -193,7 +196,7 @@ const BookForm = () => {
               required
               sx={{ mb: 4 }}
             />
-            <TextField
+            {/* <TextField
               type="date"
               name="borrowDate"
               id="borrow-date"
@@ -216,7 +219,7 @@ const BookForm = () => {
               value={newBook.returnDate}
               fullWidth
               sx={{ mb: 4 }}
-            />
+            /> */}
 
             {/* more inputs to be loaded.... */}
             <Button variant="outlined" color="secondary" type="submit">

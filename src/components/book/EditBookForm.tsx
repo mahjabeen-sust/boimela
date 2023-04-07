@@ -1,17 +1,31 @@
-import React, { useState, ChangeEvent } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, ChangeEvent, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import type { AppDispatch } from '../../store'
+import type { AppDispatch, RootState } from '../../store'
 import { editBook } from '../../features/books/booksSlice'
 import { Book } from '../../type'
+import { fetchAuthorsThunk } from '../../features/authors/authorsSlice'
 
 //mui
 import { TextField, Button, InputLabel, Select, MenuItem } from '@mui/material'
 
 import styled from '@mui/system/styled'
 
+function formatTheDate(dateString: string) {
+  if (typeof dateString == 'undefined' || dateString == null) return '0000-00-00'
+  // console.log(dateString)
+  // return dateString
+  var r_date = dateString.split('/')
+  var mod_date =
+    r_date[2] + '-' + (r_date[0].length === 1 ? 0 + r_date[0] : r_date[0]) + '-' + r_date[1]
+  console.log('Mod ' + mod_date)
+
+  return mod_date
+}
+
 function EditBookForm(props: Book) {
   //console.log('received book', props)
+  const { authors } = useSelector((state: RootState) => state)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -24,7 +38,8 @@ function EditBookForm(props: Book) {
     authors: props.authors,
     status: props.status,
     borrowerId: props.borrowerId,
-    publishDate: props.publishDate,
+    //publishDate: props.publishDate,
+    publishDate: formatTheDate(props.publishDate),
     borrowDate: props.borrowDate,
     returnDate: props.returnDate
   })
@@ -39,14 +54,17 @@ function EditBookForm(props: Book) {
       authors: props.authors,
       status: props.status,
       borrowerId: props.borrowerId,
-      publishDate: props.publishDate,
+      //publishDate: props.publishDate,
+      publishDate: formatTheDate(props.publishDate),
       borrowDate: props.borrowDate,
       returnDate: props.returnDate
     }))
   }
 
-  //console.log('newBook: ', newBook)
+  console.log('newBook: ', newBook)
 
+  // R:8/17/2022
+  // Req: 2023-08-10
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
     let name = e.target.name
@@ -151,9 +169,12 @@ function EditBookForm(props: Book) {
           <MenuItem value={newBook.authors} selected>
             {newBook.authors}
           </MenuItem>
-          <MenuItem value="author1">Author1</MenuItem>
+          {authors.items.map((author) => (
+            <MenuItem value={author.authorName}>{author.authorName}</MenuItem>
+          ))}
+          {/* <MenuItem value="author1">Author1</MenuItem>
           <MenuItem value="author2">Author2</MenuItem>
-          <MenuItem value="author3">Author3</MenuItem>
+          <MenuItem value="author3">Author3</MenuItem> */}
         </Select>
 
         <InputLabel id="status-edit-label">Status</InputLabel>
@@ -193,11 +214,12 @@ function EditBookForm(props: Book) {
           label="Publish Date"
           onChange={handleChange}
           value={newBook.publishDate}
+          // value="2023-08-10"
           fullWidth
           required
           sx={{ mb: 4 }}
         />
-        <TextField
+        {/* <TextField
           type="date"
           name="borrowDate"
           id="borrow-date-edit"
@@ -220,7 +242,7 @@ function EditBookForm(props: Book) {
           value={newBook.returnDate}
           fullWidth
           sx={{ mb: 4 }}
-        />
+        /> */}
 
         {/* more inputs to be loaded.... */}
         <Button variant="outlined" color="secondary" type="submit">

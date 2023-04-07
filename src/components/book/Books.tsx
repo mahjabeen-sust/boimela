@@ -57,7 +57,7 @@ const Books = () => {
         {books.items.map((book) => (
           <Grid xs={2} sm={4} key={book.isbn}>
             {/* <Item> */}
-            <Card sx={{ maxWidth: 345, p: 0, minHeight: 200 }}>
+            <Card sx={{ maxWidth: 345, p: 0, minHeight: 200 }} key={book.isbn}>
               <CardMedia
                 sx={{ height: 100 }}
                 image="/assets/images/book-image.jpg"
