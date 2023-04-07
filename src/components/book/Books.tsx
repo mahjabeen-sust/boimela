@@ -14,7 +14,7 @@ import styled from '@mui/system/styled'
 
 import type { RootState, AppDispatch } from '../../store'
 import { fetchBooksThunk } from '../../features/books/booksSlice'
-import { string } from 'zod'
+import { object, string } from 'zod'
 
 const Item = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,23 +27,8 @@ const Item = styled('div')(({ theme }) => ({
 
 const Books = () => {
   const { books } = useSelector((state: RootState) => state)
+  console.log('length of book object', books.items.length)
   const dispatch = useDispatch<AppDispatch>()
-
-  // const [editableBook, setEditableBook] = useState({
-  //   isbn: '',
-  //   title: '',
-  //   description: '',
-  //   publisher: '',
-  //   authors: '',
-  //   status: false,
-  //   borrowerId: null,
-  //   publishDate: new Date(),
-  //   borrowDate: new Date(),
-  //   returnDate: new Date()
-  // })
-
-  //check if user is admin
-  const loggedInUser = useSelector((state: RootState) => state.auth.loggedInUser)
 
   useEffect(() => {
     dispatch(fetchBooksThunk())
@@ -56,7 +41,6 @@ const Books = () => {
         {/* {Array.from(Array(50)).map((_, index) => ( */}
         {books.items.map((book) => (
           <Grid xs={2} sm={4} key={book.isbn}>
-            {/* <Item> */}
             <Card sx={{ maxWidth: 345, p: 0, minHeight: 200 }} key={book.isbn}>
               <CardMedia
                 sx={{ height: 100 }}
@@ -78,8 +62,6 @@ const Books = () => {
                 </Typography>
               </CardContent>
             </Card>
-            {/* {edit && <EditBookForm {...book} />} */}
-            {/* </Item> */}
           </Grid>
         ))}
       </Grid>

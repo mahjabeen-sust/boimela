@@ -13,7 +13,7 @@ import Grid from '@mui/system/Unstable_Grid'
 import styled from '@mui/system/styled'
 
 import type { RootState, AppDispatch } from '../../store'
-import { fetchBooksThunk, borrowBook } from '../../features/books/booksSlice'
+import { fetchBooksThunk, editBook } from '../../features/books/booksSlice'
 import { Book } from '../../type'
 
 const Item = styled('div')(({ theme }) => ({
@@ -31,40 +31,49 @@ const BorrowBook = () => {
 
   //check if user is admin
   const loggedInUser = useSelector((state: RootState) => state.auth.loggedInUser)
-  const [borrowedBook, setBorrowedBook] = useState<Book>({
-    isbn: '',
-    title: '',
-    description: '',
-    publisher: '',
-    authors: '',
-    status: false,
-    borrowerId: '',
-    publishDate: '',
-    borrowDate: new Date().toLocaleDateString(),
-    returnDate: null
-  })
+  // const [borrowedBook, setBorrowedBook] = useState<Book>({
+  //   isbn: '',
+  //   title: '',
+  //   description: '',
+  //   publisher: '',
+  //   authors: '',
+  //   status: false,
+  //   borrowerId: '',
+  //   publishDate: '',
+  //   borrowDate: new Date().toLocaleDateString(),
+  //   returnDate: null
+  // })
 
   useEffect(() => {
     dispatch(fetchBooksThunk())
   }, [])
 
-  const borrow = (book: Book) => {
-    //a new object for borrow-ing book
+  const borrow = (isbn: string) => {
+    //console.log('isbn', isbn)
 
-    setBorrowedBook((prev) => ({
-      ...prev,
-      isbn: book.isbn,
-      title: book.title,
-      description: book.description,
-      publisher: book.publisher,
-      authors: book.authors,
+    //find the book to be borrowed
+    const bookToBeBorrowed = books.items.find((book) => {
+      if (book.isbn === isbn) return book
+    })
+    //console.log('book to be borrowed:', bookToBeBorrowed)
+
+    const borrowedBook = {
+      isbn: bookToBeBorrowed.isbn,
+      title: bookToBeBorrowed.title,
+      description: bookToBeBorrowed.description,
+      publisher: bookToBeBorrowed.publisher,
+      authors: bookToBeBorrowed.authors,
+      status: false,
+      publishDate: bookToBeBorrowed.publishDate,
       borrowerId: loggedInUser.email,
-      publishDate: book.publishDate
-    }))
+      borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
+      returnDate: null
+    }
 
+    //console.log('book to be borrowed:', borrowedBook)
     //dispatch the borrowBook
-    //console.log('borrower_id:', borrowedBook.borrowerId)
-    dispatch(borrowBook(borrowedBook))
+
+    dispatch(editBook(borrowedBook))
   }
   //console.log('book to be borrowed', borrowedBook)
 
@@ -105,7 +114,7 @@ const BorrowBook = () => {
                 {/* if user is not admin */}
                 <CardActions>
                   {loggedInUser?.isAdmin === false && book.status ? (
-                    <Button size="small" type="button" onClick={() => borrow(book)}>
+                    <Button size="small" type="button" onClick={() => borrow(book.isbn)}>
                       Borrow
                     </Button>
                   ) : (
@@ -113,7 +122,6 @@ const BorrowBook = () => {
                   )}
                 </CardActions>
               </Card>
-              {/* {edit && <EditBookForm {...book} />} */}
             </Grid>
           ))}
         </Grid>

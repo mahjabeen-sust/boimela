@@ -22,5 +22,17 @@
     "publishDate": "11/8/2022",
     "borrowDate": null,
     "returnDate": null
+  },
+  {
+    "isbn": "124260852-Y",
+    "title": "The Lost City",
+    "description": "Average",
+    "publisher": "PP",
+    "authors": "MZI",
+    "status": false,
+    "borrowerId": null,
+    "publishDate": "11/8/2022",
+    "borrowDate": null,
+    "returnDate": null
   }
 ]

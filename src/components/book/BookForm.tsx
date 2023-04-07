@@ -21,8 +21,8 @@ const BookForm = () => {
     publisher: '',
     authors: '',
     status: true,
-    borrowerId: '',
-    publishDate: '',
+    borrowerId: null,
+    publishDate: new Date(),
     //borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
     borrowDate: null,
     //returnDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/')
@@ -159,6 +159,7 @@ const BookForm = () => {
 
             <InputLabel id="status-add-label">Status</InputLabel>
             <Select
+              sx={{ mt: 2 }}
               label="Status"
               name="status"
               required
@@ -172,18 +173,6 @@ const BookForm = () => {
             </Select>
 
             <TextField
-              label="Borrower Id"
-              name="borrowerId"
-              onChange={handleChange}
-              variant="outlined"
-              color="secondary"
-              type="text"
-              sx={{ mb: 3 }}
-              fullWidth
-              value={newBook.borrowerId}
-              //error={titleError}
-            />
-            <TextField
               type="date"
               name="publishDate"
               id="publish-date"
@@ -194,7 +183,7 @@ const BookForm = () => {
               value={newBook.publishDate}
               fullWidth
               required
-              sx={{ mb: 4 }}
+              sx={{ mb: 4, mt: 4 }}
             />
             {/* <TextField
               type="date"
