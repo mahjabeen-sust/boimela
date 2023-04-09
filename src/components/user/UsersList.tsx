@@ -36,7 +36,7 @@ const UsersList = () => {
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 0, md: 0 }}
         className="main-container">
-        <Grid item xs={3} className="admin-nav-container">
+        <Grid item xs={3}>
           <AdminNav />
         </Grid>
         <Grid item xs={9} className="pl-24">

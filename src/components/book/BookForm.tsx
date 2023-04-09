@@ -1,6 +1,8 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Grid from '@mui/material/Grid'
+import Datepicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import AdminNav from '../admin/AdminNav'
 import type { AppDispatch, RootState } from '../../store'
@@ -10,9 +12,12 @@ import Books from './Books'
 
 //mui
 import { TextField, FormControl, Button, InputLabel, Select, MenuItem } from '@mui/material'
+import { Preview } from '@mui/icons-material'
+import { date } from 'zod'
 
 const BookForm = () => {
   const { authors } = useSelector((state: RootState) => state)
+  const [startDate, setStartDate] = useState(new Date())
 
   const [newBook, setNewBook] = useState({
     isbn: '',
@@ -22,10 +27,8 @@ const BookForm = () => {
     authors: '',
     status: true,
     borrowerId: null,
-    publishDate: new Date(),
-    //borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
+    publishDate: new Date().toISOString().slice(0, 7).replace('/-/gi', '/'),
     borrowDate: null,
-    //returnDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/')
     returnDate: null
   })
 
@@ -42,7 +45,7 @@ const BookForm = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    console.log(newBook)
+    //console.log('newBook', newBook)
     // return 1
     //from mui example
     setTitleError(false)
@@ -77,7 +80,7 @@ const BookForm = () => {
         rowSpacing={1}
         columnSpacing={{ xs: 1, sm: 0, md: 0 }}
         className="main-container">
-        <Grid item xs={3} className="admin-nav-container">
+        <Grid item xs={3}>
           <AdminNav />
         </Grid>
         <Grid item xs={9} className="pl-24">
@@ -159,7 +162,7 @@ const BookForm = () => {
 
             <InputLabel id="status-add-label">Status</InputLabel>
             <Select
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, mb: 2 }}
               label="Status"
               name="status"
               required
@@ -185,32 +188,15 @@ const BookForm = () => {
               required
               sx={{ mb: 4, mt: 4 }}
             />
-            {/* <TextField
-              type="date"
-              name="borrowDate"
-              id="borrow-date"
-              variant="outlined"
-              color="secondary"
-              label="Borrow Date"
-              onChange={handleChange}
-              value={newBook.borrowDate}
-              fullWidth
-              sx={{ mb: 4 }}
-            />
-            <TextField
-              type="date"
-              name="returnDate"
-              id="return-date"
-              variant="outlined"
-              color="secondary"
-              label="Return Date"
-              onChange={handleChange}
-              value={newBook.returnDate}
-              fullWidth
-              sx={{ mb: 4 }}
+
+            {/* <Datepicker
+              onChange={(date) => setStartDate(date)}
+              //onChange={handleChange(date)}
+              selected={startDate}
+              dateFormat="MM/yyyy"
+              showMonthYearPicker
             /> */}
 
-            {/* more inputs to be loaded.... */}
             <Button variant="outlined" color="secondary" type="submit">
               Add New Book
             </Button>

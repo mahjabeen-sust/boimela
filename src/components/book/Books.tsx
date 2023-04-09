@@ -27,7 +27,7 @@ const Item = styled('div')(({ theme }) => ({
 
 const Books = () => {
   const { books } = useSelector((state: RootState) => state)
-  console.log('length of book object', books.items.length)
+  //console.log('length of book object', books.items.length)
   const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {

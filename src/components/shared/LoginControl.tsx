@@ -21,7 +21,7 @@ function LoginControl() {
         <AppBar position="static" sx={{ mb: 3 }}>
           <Toolbar>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              BoiMela
+              BoiMela{loggedInUser ? ' :: Welcome Admin' : ''}
             </Typography>
 
             {/* <Button color="inherit">Login</Button> */}

@@ -31,18 +31,7 @@ const BorrowBook = () => {
 
   //check if user is admin
   const loggedInUser = useSelector((state: RootState) => state.auth.loggedInUser)
-  // const [borrowedBook, setBorrowedBook] = useState<Book>({
-  //   isbn: '',
-  //   title: '',
-  //   description: '',
-  //   publisher: '',
-  //   authors: '',
-  //   status: false,
-  //   borrowerId: '',
-  //   publishDate: '',
-  //   borrowDate: new Date().toLocaleDateString(),
-  //   returnDate: null
-  // })
+  
 
   useEffect(() => {
     dispatch(fetchBooksThunk())
@@ -75,7 +64,7 @@ const BorrowBook = () => {
 
     dispatch(editBook(borrowedBook))
   }
-  //console.log('book to be borrowed', borrowedBook)
+  
 
   return (
     <>
