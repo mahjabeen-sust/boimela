@@ -26,19 +26,19 @@ const Borrowed = () => {
 
     //a new object for returning book
     const returnedBook = {
-      isbn: bookToBeReturned.isbn,
-      title: bookToBeReturned.title,
-      description: bookToBeReturned.description,
-      publisher: bookToBeReturned.publisher,
-      authors: bookToBeReturned.authors,
+      isbn: bookToBeReturned?.isbn,
+      title: bookToBeReturned?.title,
+      description: bookToBeReturned?.description,
+      publisher: bookToBeReturned?.publisher,
+      authors: bookToBeReturned?.authors,
       borrowerId: null,
-      publishDate: bookToBeReturned.publishDate,
+      publishDate: bookToBeReturned?.publishDate,
       status: true,
       borrowDate: null,
       returnDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/')
     }
 
-    dispatch(editBook(returnedBook))
+    dispatch(editBook(returnedBook as any))
   }
   return (
     <Grid
@@ -68,7 +68,7 @@ const Borrowed = () => {
                     <TableCell>{book.title}</TableCell>
                     <TableCell>{book.authors}</TableCell>
                     <TableCell>{book.publisher}</TableCell>
-                    <TableCell>{book.borrowDate}</TableCell>
+                    <TableCell>{book.borrowDate?.toString()}</TableCell>
 
                     <TableCell>
                       <Button size="small" type="button" onClick={() => returnBook(book.isbn)}>

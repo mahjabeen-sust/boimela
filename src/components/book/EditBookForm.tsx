@@ -165,7 +165,7 @@ function EditBookForm(props: Book) {
           required
           labelId="author-edit-label"
           id="author-edit-select"
-          onChange={handleChange}>
+          onChange={() => handleChange}>
           <MenuItem value={newBook.authors} selected>
             {newBook.authors}
           </MenuItem>
@@ -185,7 +185,7 @@ function EditBookForm(props: Book) {
           labelId="status-edit-label"
           id="status-edit-select"
           value={newBook.status}
-          onChange={handleChange}>
+          onChange={() => handleChange}>
           <MenuItem value={newBook.status as any} selected>
             {newBook.status}
           </MenuItem>
