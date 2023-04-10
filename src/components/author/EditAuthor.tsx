@@ -9,6 +9,11 @@ import EditAuthorForm from './EditAuthorForm'
 //mui
 import { TextField, Button } from '@mui/material'
 import Grid from '@mui/material/Grid'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 
 export default function EditAuthor() {
   const dispatch = useDispatch<AppDispatch>()
@@ -37,27 +42,40 @@ export default function EditAuthor() {
           <AdminNav />
         </Grid>
         <Grid item xs={9} className="pl-24">
-          <ul className="author-list">
-            {authors.items.map((author) => (
-              <li key={author.id}>
-                {author.authorName}
-                <Button
-                  size="small"
-                  onClick={() => {
-                    setupdateAuthorId(author.id)
-                  }}>
-                  Edit
-                </Button>
-                <Button
-                  size="small"
-                  onClick={() => {
-                    dispatch(deleteAuthor(author.id))
-                  }}>
-                  Delete
-                </Button>
-              </li>
-            ))}
-          </ul>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Author Name</TableCell>
+                <TableCell>Update</TableCell>
+                <TableCell>Remove</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {authors.items.map((author) => (
+                <TableRow key={author.id}>
+                  <TableCell>{author.authorName}</TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        setupdateAuthorId(author.id)
+                      }}>
+                      Edit
+                    </Button>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        dispatch(deleteAuthor(author.id))
+                      }}>
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
           {authorToBeUpdated && <EditAuthorForm {...authorToBeUpdated} />}
         </Grid>
       </Grid>

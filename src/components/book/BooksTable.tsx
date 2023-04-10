@@ -57,8 +57,8 @@ const BooksTable = () => {
                 <TableCell>Publisher</TableCell>
                 <TableCell>Publish Date</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Update</TableCell>
-                <TableCell>Remove</TableCell>
+                <TableCell>Borrower</TableCell>
+                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -69,12 +69,11 @@ const BooksTable = () => {
                   <TableCell>{book.publisher}</TableCell>
                   <TableCell>{book.publishDate}</TableCell>
                   <TableCell>{book.status ? 'Available' : 'Borrowed'}</TableCell>
+                  <TableCell>{book.borrowerId}</TableCell>
                   <TableCell>
                     <Button size="small" onClick={() => handleEdit(book.isbn)}>
                       Edit
                     </Button>
-                  </TableCell>
-                  <TableCell>
                     <Button
                       size="small"
                       onClick={() => {

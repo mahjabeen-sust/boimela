@@ -16,7 +16,7 @@ import BarChartIcon from '@mui/icons-material/BarChart'
 import LayersIcon from '@mui/icons-material/Layers'
 import AssignmentIcon from '@mui/icons-material/Assignment'
 
-export const mainListItems = (
+export const AdminNavLists = (
   <React.Fragment>
     <ListItemButton>
       <ListItemIcon>
@@ -64,6 +64,27 @@ export const mainListItems = (
       </ListItemIcon>
       <Link to="/manageUser">
         <ListItemText primary="User Lists" />
+      </Link>
+    </ListItemButton>
+  </React.Fragment>
+)
+
+export const UserNavLists = (
+  <React.Fragment>
+    <ListItemButton>
+      <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <Link to="/Dashboard">
+        <ListItemText primary="Dashboard" />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <ListItemIcon>
+        <BookTwoToneIcon />
+      </ListItemIcon>
+      <Link to="/borrowedBooks">
+        <ListItemText primary="Borrowed Books" />
       </Link>
     </ListItemButton>
   </React.Fragment>

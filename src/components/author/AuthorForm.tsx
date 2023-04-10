@@ -6,7 +6,13 @@ import type { RootState, AppDispatch } from '../../store'
 import { fetchAuthorsThunk, addNewAuthor } from '../../features/authors/authorsSlice'
 
 //mui
+
 import { TextField, Button } from '@mui/material'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 import Grid from '@mui/material/Grid'
 
 export default function AuthorForm() {
@@ -60,11 +66,22 @@ export default function AuthorForm() {
           <AdminNav />
         </Grid>
         <Grid item xs={9} className="pl-24">
-          <ul className="author-list">
-            {authors.items.map((author) => (
-              <li key={author.id}>{author.authorName}</li>
-            ))}
-          </ul>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Author Name</TableCell>
+                <TableCell>Published Books</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {authors.items.map((author) => (
+                <TableRow key={author.id}>
+                  <TableCell>{author.authorName}</TableCell>
+                  <TableCell>#of Books</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
 
           {/* author add form */}
           <form action="" className="AuthorForm" onSubmit={handleSubmit}>

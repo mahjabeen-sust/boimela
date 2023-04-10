@@ -31,7 +31,6 @@ const BorrowBook = () => {
 
   //check if user is admin
   const loggedInUser = useSelector((state: RootState) => state.auth.loggedInUser)
-  
 
   useEffect(() => {
     dispatch(fetchBooksThunk())
@@ -64,7 +63,6 @@ const BorrowBook = () => {
 
     dispatch(editBook(borrowedBook))
   }
-  
 
   return (
     <>
@@ -90,18 +88,23 @@ const BorrowBook = () => {
                   <Typography variant="body2" color="text.secondary">
                     Publisher :{book.publisher}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Borrowed By - {book.borrowerId}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Borrow Date :<span>{book.borrowDate?.toString()}</span>
-                  </Typography>
-                  <Typography gutterBottom variant="h6" component="span">
-                    {book.status ? 'Available' : 'Borrowed'}
+
+                  <Typography gutterBottom variant="button" component="span">
+                    {book.status ? (
+                      <Button
+                        size="small"
+                        variant="contained"
+                        type="button"
+                        onClick={() => borrow(book.isbn)}>
+                        Borrow
+                      </Button>
+                    ) : (
+                      'Borrowed'
+                    )}
                   </Typography>
                 </CardContent>
                 {/* if user is not admin */}
-                <CardActions>
+                {/* <CardActions>
                   {loggedInUser?.isAdmin === false && book.status ? (
                     <Button size="small" type="button" onClick={() => borrow(book.isbn)}>
                       Borrow
@@ -109,7 +112,7 @@ const BorrowBook = () => {
                   ) : (
                     ''
                   )}
-                </CardActions>
+                </CardActions> */}
               </Card>
             </Grid>
           ))}

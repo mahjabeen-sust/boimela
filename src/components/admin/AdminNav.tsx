@@ -1,24 +1,14 @@
 import { useState } from 'react'
 
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
+import { styled } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import List from '@mui/material/List'
-import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Badge from '@mui/material/Badge'
-import Container from '@mui/material/Container'
-import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
 
-import MenuIcon from '@mui/icons-material/Menu'
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import NotificationsIcon from '@mui/icons-material/Notifications'
-import { mainListItems } from './listItems'
+import { AdminNavLists } from '../shared/NavLists'
 
 const drawerWidth: number = 240
 
@@ -77,25 +67,6 @@ export default function AdminDashboard() {
   }
 
   return (
-    // <div className="admin-nav-menu">
-    //   <ul>
-    //     <li>
-    //       <Link to="/addBook">Add a New Book</Link>
-    //     </li>
-    //     <li>
-    //       <Link to="/updateBook">Update Book</Link>
-    //     </li>
-    //     <li>
-    //       <Link to="/addAuthor">Add a New Author</Link>
-    //     </li>
-    //     <li>
-    //       <Link to="/updateAuthor">Update Author</Link>
-    //     </li>
-    //     <li>
-    //       <Link to="/manageUser">Users List</Link>
-    //     </li>
-    //   </ul>
-    // </div>
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" open={open}>
         <Toolbar
@@ -106,13 +77,13 @@ export default function AdminDashboard() {
             px: [1],
             backgroundColor: '#1976d2'
           }}>
-          <IconButton onClick={toggleDrawer}>
+          {/* <IconButton onClick={toggleDrawer}>
             <ChevronLeftIcon />
-          </IconButton>
+          </IconButton> */}
         </Toolbar>
         <Divider />
         <List component="nav">
-          {mainListItems}
+          {AdminNavLists}
           <Divider sx={{ my: 1 }} />
         </List>
       </Drawer>
