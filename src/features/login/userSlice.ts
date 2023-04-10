@@ -20,7 +20,7 @@ const initialState: UserState = {
 }
 //const USERS_PLACEHOLDER_API = 'http://localhost:3000/users.json'
 const USERS_PLACEHOLDER_API =
-  'http://https://github.com/mahjabeen-sust/boimela/tree/toolkit-mui/public/users.json'
+  'https://github.com/mahjabeen-sust/boimela/tree/toolkit-mui/public/users.json'
 
 //may be work on later
 //const backendURl = 'http://localhost:3000'
