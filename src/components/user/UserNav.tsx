@@ -1,13 +1,16 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 
-import { styled } from '@mui/material/styles'
+import { styled, alpha } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
+import SearchIcon from '@mui/icons-material/Search'
+import InputBase from '@mui/material/InputBase'
+import { IconButton } from '@mui/material'
 
 import { UserNavLists } from '../shared/NavLists'
 
@@ -43,6 +46,40 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   })
 )
 
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  // backgroundColor: alpha(theme.palette.common.white, 0.15),
+  backgroundColor: '#fff',
+  '&:hover': {
+    //backgroundColor: alpha(theme.palette.common.white, 0.25)
+    backgroundColor: '#fff'
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto'
+  }
+}))
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '10ch',
+      '&:focus': {
+        width: '13ch'
+      }
+    }
+  }
+}))
+
 export default function UserNav() {
   const [open, setOpen] = useState(true)
   const toggleDrawer = () => {
@@ -63,6 +100,12 @@ export default function UserNav() {
           {/* <IconButton onClick={toggleDrawer}>
             <ChevronLeftIcon />
           </IconButton> */}
+          <Search>
+            <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+            <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Search>
         </Toolbar>
         <Divider />
         <List component="nav">
