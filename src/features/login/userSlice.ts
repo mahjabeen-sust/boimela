@@ -19,8 +19,7 @@ const initialState: UserState = {
   isBanned: []
 }
 //const USERS_PLACEHOLDER_API = 'http://localhost:3000/users.json'
-const USERS_PLACEHOLDER_API =
-  'https://github.com/mahjabeen-sust/boimela/tree/toolkit-mui/public/users.json'
+const USERS_PLACEHOLDER_API = 'https://github.com/mahjabeen-sust/boimela/users.json'
 
 //may be work on later
 //const backendURl = 'http://localhost:3000'
