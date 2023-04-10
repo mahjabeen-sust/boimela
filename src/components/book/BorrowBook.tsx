@@ -46,14 +46,14 @@ const BorrowBook = () => {
     //console.log('book to be borrowed:', bookToBeBorrowed)
 
     const borrowedBook = {
-      isbn: bookToBeBorrowed.isbn,
-      title: bookToBeBorrowed.title,
-      description: bookToBeBorrowed.description,
-      publisher: bookToBeBorrowed.publisher,
-      authors: bookToBeBorrowed.authors,
+      isbn: bookToBeBorrowed?.isbn,
+      title: bookToBeBorrowed?.title,
+      description: bookToBeBorrowed?.description,
+      publisher: bookToBeBorrowed?.publisher,
+      authors: bookToBeBorrowed?.authors,
       status: false,
-      publishDate: bookToBeBorrowed.publishDate,
-      borrowerId: loggedInUser.email,
+      publishDate: bookToBeBorrowed?.publishDate,
+      borrowerId: loggedInUser?.email,
       borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
       returnDate: null
     }
@@ -61,7 +61,7 @@ const BorrowBook = () => {
     //console.log('book to be borrowed:', borrowedBook)
     //dispatch the borrowBook
 
-    dispatch(editBook(borrowedBook))
+    dispatch(editBook(borrowedBook as any))
   }
 
   return (
