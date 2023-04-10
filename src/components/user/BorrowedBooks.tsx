@@ -41,19 +41,19 @@ export default function BorrowedBooks() {
 
     //a new object for returning book
     const returnedBook = {
-      isbn: bookToBeReturned.isbn,
-      title: bookToBeReturned.title,
-      description: bookToBeReturned.description,
-      publisher: bookToBeReturned.publisher,
-      authors: bookToBeReturned.authors,
+      isbn: bookToBeReturned?.isbn,
+      title: bookToBeReturned?.title,
+      description: bookToBeReturned?.description,
+      publisher: bookToBeReturned?.publisher,
+      authors: bookToBeReturned?.authors,
       borrowerId: null,
-      publishDate: bookToBeReturned.publishDate,
+      publishDate: bookToBeReturned?.publishDate,
       status: true,
       borrowDate: null,
       returnDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/')
     }
 
-    dispatch(editBook(returnedBook))
+    dispatch(editBook(returnedBook as any))
   }
 
   return (
