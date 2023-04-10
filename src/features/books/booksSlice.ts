@@ -15,7 +15,9 @@ const initialState: BookState = {
   error: null
 }
 
-const BOOKS_PLACEHOLDER_API = 'http://localhost:3000/books-small.json'
+//const BOOKS_PLACEHOLDER_API = 'http://localhost:3000/books-small.json'
+const BOOKS_PLACEHOLDER_API =
+  'http://https://github.com/mahjabeen-sust/boimela/tree/toolkit-mui/public/books-small.json'
 
 //ACTION
 

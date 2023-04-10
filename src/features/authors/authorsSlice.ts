@@ -15,7 +15,9 @@ const initialState: authorState = {
   error: null
 }
 
-const AUTHORS_PLACEHOLDER_API = 'http://localhost:3000/authors.json'
+//const AUTHORS_PLACEHOLDER_API = 'http://localhost:3000/authors.json'
+const AUTHORS_PLACEHOLDER_API =
+  'http://https://github.com/mahjabeen-sust/boimela/tree/toolkit-mui/public/authors.json'
 
 //ACTION
 
