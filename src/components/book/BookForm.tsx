@@ -149,7 +149,7 @@ const BookForm = () => {
               value={newBook.authors}
               required
               //onChange={handleChange} //this works
-              onChange={() => handleChange}>
+              onChange={(event) => handleChange(event as any)}>
               {/* <MenuItem value={newBook.authors} selected>
                 {newBook.authors}
               </MenuItem> */}
@@ -169,7 +169,7 @@ const BookForm = () => {
               required
               value={newBook.status}
               //onChange={handleChange} //this works
-              onChange={() => handleChange}>
+              onChange={(event) => handleChange(event as any)}>
               <MenuItem value={newBook.status as any} selected>
                 {newBook.status}
               </MenuItem>
