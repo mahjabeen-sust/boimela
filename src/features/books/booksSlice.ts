@@ -17,7 +17,7 @@ const initialState: BookState = {
 
 //const BOOKS_PLACEHOLDER_API = 'http://localhost:3000/books-small.json'
 // const BOOKS_PLACEHOLDER_API = 'https://github.com/mahjabeen-sust/boimela/books-small.json'
-const BOOKS_PLACEHOLDER_API = 'https://toolkit-mui--boimela.netlify.app/books-small.json'
+const BOOKS_PLACEHOLDER_API = 'https://boimela.netlify.app/books-small.json'
 
 //ACTION
 

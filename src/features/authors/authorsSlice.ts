@@ -16,8 +16,10 @@ const initialState: authorState = {
 }
 
 //const AUTHORS_PLACEHOLDER_API = 'http://localhost:3000/authors.json'
-const AUTHORS_PLACEHOLDER_API = 'https://toolkit-mui--boimela.netlify.app/authors.json'
+const AUTHORS_PLACEHOLDER_API = 'https://boimela.netlify.app/authors.json'
 
+// axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL || 'https://pmapi.bluewindlab.com'
+//
 //ACTION
 
 export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async (data, thunkApi) => {
