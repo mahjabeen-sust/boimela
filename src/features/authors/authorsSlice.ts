@@ -16,7 +16,7 @@ const initialState: authorState = {
 }
 
 //const AUTHORS_PLACEHOLDER_API = 'http://localhost:3000/authors.json'
-const AUTHORS_PLACEHOLDER_API = 'https://github.com/mahjabeen-sust/boimela/authors.json'
+const AUTHORS_PLACEHOLDER_API = 'https://toolkit-mui--boimela.netlify.app/authors.json'
 
 //ACTION
 

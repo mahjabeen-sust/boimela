@@ -19,7 +19,7 @@ const initialState: UserState = {
   isBanned: []
 }
 //const USERS_PLACEHOLDER_API = 'http://localhost:3000/users.json'
-const USERS_PLACEHOLDER_API = 'https://github.com/mahjabeen-sust/boimela/users.json'
+const USERS_PLACEHOLDER_API = 'https://toolkit-mui--boimela.netlify.app/users.json'
 
 //may be work on later
 //const backendURl = 'http://localhost:3000'
