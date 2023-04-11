@@ -194,18 +194,6 @@ function EditBookForm(props: Book) {
         </Select>
 
         <TextField
-          label="Borrower Id"
-          name="borrowerId"
-          onChange={handleChange}
-          variant="outlined"
-          color="secondary"
-          type="text"
-          sx={{ mb: 3 }}
-          fullWidth
-          value={newBook.borrowerId}
-          //error={titleError}
-        />
-        <TextField
           type="date"
           name="publishDate"
           id="publish-date-edit"
