@@ -185,7 +185,8 @@ function EditBookForm(props: Book) {
           labelId="status-edit-label"
           id="status-edit-select"
           value={newBook.status}
-          onChange={(event) => handleChange(event as any)}>
+          onChange={(event) => handleChange(event as any)}
+          sx={{ mb: 2 }}>
           <MenuItem value={newBook.status as any} selected>
             {newBook.status}
           </MenuItem>
