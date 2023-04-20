@@ -6,7 +6,6 @@ import authorReducer from './features/authors/authorsSlice'
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
     books: booksReducer,
     auth: userReducer,
     authors: authorReducer
