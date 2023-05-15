@@ -30,9 +30,10 @@ const Books = () => {
   //console.log('length of book object', books.items.length)
   const dispatch = useDispatch<AppDispatch>()
 
-  useEffect(() => {
-    dispatch(fetchBooksThunk())
-  }, [])
+  //commenting for cors problem, will uncomment later
+  // useEffect(() => {
+  //   dispatch(fetchBooksThunk())
+  // }, [])
 
   return (
     <Box sx={{ flexGrow: 1 }}>

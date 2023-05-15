@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import type { RootState, AppDispatch } from '../../store'
-//import { logout } from '../../features/login/userSlice'
-import { logout } from '../../features/login/authSlice'
+import { logout } from '../../features/login/userSlice'
 
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -27,7 +26,8 @@ function LoginControl() {
               BoiMela{loggedInUser?.role == 'ADMIN' ? ' :: Welcome Admin' : ''}
             </Typography>
 
-            {loggedInUser.username !== null ? (
+            {/* <Button color="inherit">Login</Button> */}
+            {loggedInUser !== null ? (
               <>
                 {/* <span className="pr-24">{loggedInUser?.firstName}</span> */}
                 <span className="pr-24">{loggedInUser?.username}</span>

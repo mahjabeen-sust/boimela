@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from './features/counter/counterSlice'
 import booksReducer from './features/books/booksSlice'
-import userReducer from './features/login/userSlice'
+//import userReducer from './features/login/userSlice'
+import authReducer from './features/login/authSlice'
 import authorReducer from './features/authors/authorsSlice'
 
 export const store = configureStore({
   reducer: {
     books: booksReducer,
-    auth: userReducer,
+    //auth: userReducer,
+    auth: authReducer,
     authors: authorReducer
   }
 })
