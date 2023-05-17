@@ -183,6 +183,12 @@ button:focus-visible {
   border: 1px solid lightgoldenrodyellow;
 }
 
+.error {
+  color: red;
+  display: block;
+  margin: 0 0 12px 0;
+}
+
 /* author list */
 
 ul.author-list {

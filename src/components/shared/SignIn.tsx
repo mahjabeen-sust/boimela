@@ -26,26 +26,9 @@ const SignIn = () => {
   const { handleSubmit } = useForm()
 
   const dispatch = useDispatch<AppDispatch>()
-  //checking if user exists
-  //const payload = isUser({ email, password })
-  //console.log('payload from userService', payload)
-
-  //   const logUser = () => {
-  //     //alert('loguser')
-  //     if (payload) {
-  //       dispatch(login(payload))
-  //       if (payload.isAdmin === true) {
-  //         navigate('/adminDashboard')
-  //       } else {
-  //         navigate('/dashboard')
-  //       }
-  //     } else {
-  //       alert('wrong credentials')
-  //     }
-  //   }
 
   const userState = useSelector((state: RootState) => state.auth)
-  console.log('error : ', userState.error)
+
   if (userState.user.username !== null) {
     //console.log('role : ', loggedInUser.role)
     if (userState.user.role == 'ADMIN') {
@@ -53,9 +36,7 @@ const SignIn = () => {
     } else {
       navigate('/dashboard')
     }
-  } //else {
-  //alert('wrong credentials')
-  //}
+  }
 
   const handleSignIn = async () => {
     dispatch(
@@ -106,6 +87,8 @@ const SignIn = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        {userState.error ? <div className="error">{userState.error}</div> : ''}
+
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"

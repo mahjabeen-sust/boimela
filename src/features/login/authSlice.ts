@@ -89,18 +89,27 @@ export const authSlice = createSlice({
 
     builder.addCase(signInThunk.fulfilled, (state, action) => {
       state.isLoading = false
-      state.error = null
-      const token = action.payload.token
-      const decodedUser = jwt_decode(token) as DecodedUser
-      //console.log('Decoded user : ', decodedUser)
-      localStorage.setItem('token', token)
 
-      const user: User = {
-        username: decodedUser.username,
-        id: decodedUser.user_id,
-        role: decodedUser.role
+      const token = action.payload.token
+      if (token === '404 NOT_FOUND') {
+        state.error = 'Username not found! Please sign up!'
+        state.user.username = null
+      } else if (token === '401 UNAUTHORIZED') {
+        state.error = 'Password Does Not Match!'
+        state.user.username = null
+      } else {
+        state.error = null
+        const decodedUser = jwt_decode(token) as DecodedUser
+        //console.log('Decoded user : ', decodedUser)
+        localStorage.setItem('token', token)
+
+        const user: User = {
+          username: decodedUser.username,
+          id: decodedUser.user_id,
+          role: decodedUser.role
+        }
+        state.user = user
       }
-      state.user = user
     })
     builder.addCase(signInThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
