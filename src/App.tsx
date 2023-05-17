@@ -1,6 +1,10 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import Login from './components/shared/Login'
+import type { AppDispatch } from './store'
+import { loadUserFromStorage } from './features/login/authSlice'
 import SignIn from './components/shared/SignIn'
 import Dashboard from './components/user/Dashboard'
 import ProtectedRoute from './routing/ProtectedRoute'
@@ -34,6 +38,12 @@ const Header = ({ children }: any) => children
 const Wrapper = ({ children }: any) => children
 
 function App() {
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    dispatch(loadUserFromStorage())
+  }, [])
+
   return (
     <div className="App">
       <BrowserRouter>

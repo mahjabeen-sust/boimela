@@ -73,7 +73,7 @@ export const authSlice = createSlice({
       }
       state.user = user
 
-      console.log('inside logout reducer>state.loggedInUser: ', state.user.username)
+      //console.log('inside logout reducer>state.loggedInUser: ', state.user.username)
     }
   },
   extraReducers: (builder) => {
