@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
-import { useNavigate, Link } from 'react-router-dom'
 
-import { signInThunk } from '../../features/login/authSlice'
+import { signUpThunk } from '../../features/login/authSlice'
 import type { AppDispatch, RootState } from '../../store'
 
 import Avatar from '@mui/material/Avatar'
@@ -11,35 +10,23 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-//import Link from '@mui/material/Link'
-import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 
-const SignIn = () => {
+const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const navigate = useNavigate()
   const { handleSubmit } = useForm()
 
   const dispatch = useDispatch<AppDispatch>()
 
   const userState = useSelector((state: RootState) => state.auth)
 
-  if (userState.user.username !== null) {
-    //console.log('role : ', loggedInUser.role)
-    if (userState.user.role == 'ADMIN') {
-      navigate('/adminDashboard')
-    } else {
-      navigate('/dashboard')
-    }
-  }
-
-  const handleSignIn = async () => {
+  const handleSignUp = async () => {
     dispatch(
-      signInThunk({
+      signUpThunk({
         username: email,
         password: password
       })
@@ -58,9 +45,9 @@ const SignIn = () => {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Sign in
+        Register as a New User
       </Typography>
-      <Box component="form" onSubmit={handleSubmit(handleSignIn)} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={handleSubmit(handleSignUp)} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           required
@@ -85,26 +72,14 @@ const SignIn = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        {userState.error ? <div className="error">{userState.error}</div> : ''}
+        {userState.registerStatus ? <div className="error">{userState.registerStatus}</div> : ''}
 
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        />
         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-          Sign In
+          Sign Up
         </Button>
-        <Grid container>
-          <Grid item xs>
-            <Link to="#">Forgot password?</Link>
-          </Grid>
-          <Grid item>
-            <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
-          </Grid>
-        </Grid>
       </Box>
     </Box>
   )
 }
 
-export default SignIn
+export default SignUp

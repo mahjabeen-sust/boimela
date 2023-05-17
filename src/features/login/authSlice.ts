@@ -14,6 +14,7 @@ export interface UserState {
   user: User
   isLoading: boolean
   error: string | null
+  registerStatus: string | null
 }
 export type DecodedUser = {
   user_id: string
@@ -30,14 +31,15 @@ export type User = {
 const initialState: UserState = {
   user: { id: null, username: null, role: null },
   isLoading: false,
-  error: null
+  error: null,
+  registerStatus: null
 }
 
 export const signUpThunk = createAsyncThunk(
-  'user/signup',
+  'auth/signup',
   async (user: { username: string; password: string }) => {
     console.log(user)
-    const res = await axios.post('http://localhost:8080/api/v1/signup', user)
+    const res = await axios.post('http://localhost:8080/signup', user)
 
     console.log('res', res)
     return res.data
@@ -79,7 +81,14 @@ export const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(signUpThunk.fulfilled, (state, action) => {
       console.log(action)
-      state.user = action.payload
+      //state.user = action.payload
+      const message = action.payload
+      if (message === '409 CONFLICT') {
+        state.registerStatus = 'Username Already Exist! Choose a different username.'
+      }
+      if (message === '201 CREATED') {
+        state.registerStatus = 'Registered succesfully! Please signin to continue.'
+      }
     })
 
     builder.addCase(signInThunk.pending, (state) => {

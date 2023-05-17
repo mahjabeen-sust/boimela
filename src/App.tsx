@@ -17,6 +17,7 @@ import UsersList from './components/user/UsersList'
 import Books from './components/book/Books'
 import BooksTable from './components/book/BooksTable'
 import Borrowed from './components/user/Borrowed'
+import SignUp from './components/shared/SignUp'
 //import SignIn from './components/shared/SignInMUI'
 
 /**
@@ -58,6 +59,7 @@ function App() {
 
               {/* <Route path="/login" element={<Login />} /> */}
               <Route path="/login" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
 
               <Route path="/logout" element={<Logout />} />
               <Route element={<ProtectedRoute />}>
