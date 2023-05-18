@@ -53,7 +53,7 @@ export default function EditAuthor() {
             <TableBody>
               {authors.items.map((author) => (
                 <TableRow key={author.id}>
-                  <TableCell>{author.authorName}</TableCell>
+                  <TableCell>{author.name}</TableCell>
                   <TableCell>
                     <Button
                       size="small"

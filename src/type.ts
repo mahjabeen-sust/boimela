@@ -23,5 +23,5 @@ export type Book = {
 
 export type Author = {
   id: number
-  authorName: string
+  name: string
 }

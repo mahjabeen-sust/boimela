@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import axios from 'axios'
 
 import { Author } from '../../type'
 
@@ -22,15 +23,29 @@ const AUTHORS_PLACEHOLDER_API = 'https://boimela.netlify.app/authors.json'
 //
 //ACTION
 
-export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async (data, thunkApi) => {
-  try {
-    const response = await fetch(AUTHORS_PLACEHOLDER_API)
-    const data: Author[] = await response.json()
-    //console.log('Found authors', data)
-    return data
-  } catch (error: any) {
-    return thunkApi.rejectWithValue(error.message)
+// export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async (data, thunkApi) => {
+//   try {
+//     const response = await fetch(AUTHORS_PLACEHOLDER_API)
+//     const data: Author[] = await response.json()
+//     //console.log('Found authors', data)
+//     return data
+//   } catch (error: any) {
+//     return thunkApi.rejectWithValue(error.message)
+//   }
+// })
+
+export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async () => {
+  const token = localStorage.getItem('token')
+
+  let config = {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
   }
+  const response = await axios.get('http://localhost:8080/api/v1/authors/', config)
+  const data: Author[] = await response.data
+  console.log('Found authors', data)
+  return data
 })
 
 //SLICE

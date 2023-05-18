@@ -76,7 +76,7 @@ export default function AuthorForm() {
             <TableBody>
               {authors.items.map((author) => (
                 <TableRow key={author.id}>
-                  <TableCell>{author.authorName}</TableCell>
+                  <TableCell>{author.name}</TableCell>
                   <TableCell>#of Books</TableCell>
                 </TableRow>
               ))}
