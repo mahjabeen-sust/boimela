@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import AdminNav from '../admin/AdminNav'
 import type { RootState, AppDispatch } from '../../store'
-import { fetchAuthorsThunk, addNewAuthor } from '../../features/authors/authorsSlice'
+import { fetchAuthorsThunk, addNewAuthorThunk } from '../../features/authors/authorsSlice'
 
 //mui
 
@@ -20,19 +20,21 @@ export default function AuthorForm() {
   const { authors } = useSelector((state: RootState) => state)
   //console.log('author object length', Object.keys(authors.items).length)
 
-  const [newAuthor, setNewAuthor] = useState({
-    id: Object.keys(authors.items).length + 1,
-    authorName: ''
-  })
+  // const [newAuthor, setNewAuthor] = useState({
+  //   id: Object.keys(authors.items).length + 1,
+  //   name: ''
+  // })
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value
-    let name = e.target.name
-    setNewAuthor((prev) => ({
-      ...prev,
-      [name]: value
-    }))
-  }
+  // const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   let value = e.target.value
+  //   let name = e.target.name
+  //   setNewAuthor((prev) => ({
+  //     ...prev,
+  //     [name]: value
+  //   }))
+  // }
+
+  const [name, setName] = useState('')
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
@@ -40,12 +42,12 @@ export default function AuthorForm() {
     //from mui example
     setNameError(false)
 
-    if (newAuthor.authorName == '') {
+    if (name == '') {
       setNameError(true)
     }
 
-    if (newAuthor.authorName) {
-      dispatch(addNewAuthor(newAuthor))
+    if (name) {
+      dispatch(addNewAuthorThunk({ name: name }))
       //;<Link to="/adminDashboard">Go back to dashboard</Link>
     }
   }
@@ -90,14 +92,14 @@ export default function AuthorForm() {
             <TextField
               label="Name"
               name="authorName"
-              onChange={handleChange}
+              onChange={(e) => setName(e.target.value)}
               required
               variant="outlined"
               color="secondary"
               type="text"
               sx={{ mb: 3 }}
               fullWidth
-              value={newAuthor.authorName}
+              value={name}
               //error={nameError}
             />
             <Button variant="outlined" color="secondary" type="submit">

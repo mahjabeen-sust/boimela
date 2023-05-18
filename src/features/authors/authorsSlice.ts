@@ -44,9 +44,40 @@ export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async () => {
   }
   const response = await axios.get('http://localhost:8080/api/v1/authors/', config)
   const data: Author[] = await response.data
-  console.log('Found authors', data)
+  //console.log('Found authors', data)
   return data
 })
+
+export const addNewAuthorThunk = createAsyncThunk(
+  'authors/add',
+  async (author: { name: string }) => {
+    //console.log(author)
+    const token = localStorage.getItem('token')
+
+    const headers = {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token
+    }
+
+    // Make the Axios request
+    const response = await axios.post('http://localhost:8080/api/v1/authors/', author, {
+      headers
+    })
+    console.log(response.data)
+    return response.data
+    // axios
+    //   .post('http://localhost:8080/api/v1/authors/', author, { headers })
+    //   .then((response) => {
+    //     // Handle the response
+    //     console.log(response.data)
+    //     return response.data
+    //   })
+    //   .catch((error) => {
+    //     // Handle the error
+    //     console.error(error)
+    //   })
+  }
+)
 
 //SLICE
 export const authorsSlice = createSlice({
@@ -89,6 +120,11 @@ export const authorsSlice = createSlice({
     builder.addCase(fetchAuthorsThunk.fulfilled, (state, action: PayloadAction<Author[]>) => {
       state.isLoading = false
       state.items = action.payload
+    })
+
+    builder.addCase(addNewAuthorThunk.fulfilled, (state, action) => {
+      state.items = [action.payload, ...state.items]
+      console.log('inside addnewauthorThunk reducer>state.items: ', state.items)
     })
   }
 })

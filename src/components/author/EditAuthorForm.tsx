@@ -17,13 +17,13 @@ export default function EditAuthorForm(props: Author) {
 
   const [newAuthor, setNewAuthor] = useState({
     id: props.id,
-    authorName: props.authorName
+    name: props.name
   })
   if (newAuthor.id !== props.id) {
     setNewAuthor((prev) => ({
       ...prev,
       id: props.id,
-      authorName: props.authorName
+      name: props.name
     }))
   }
 
@@ -43,10 +43,10 @@ export default function EditAuthorForm(props: Author) {
     e.preventDefault()
     //from mui example
     setNameError(false)
-    if (newAuthor.authorName == '') {
+    if (newAuthor.name == '') {
       setNameError(true)
     }
-    if (newAuthor.authorName) {
+    if (newAuthor.name) {
       dispatch(editAuthor(newAuthor))
       //;<Link to="/adminDashboard">Go back to dashboard</Link>
     }
@@ -72,7 +72,7 @@ export default function EditAuthorForm(props: Author) {
           type="text"
           sx={{ mb: 3 }}
           fullWidth
-          value={newAuthor.authorName}
+          value={newAuthor.name}
           placeholder="placeholder"
           //error={nameError}
         />

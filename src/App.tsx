@@ -23,11 +23,7 @@ import SignUp from './components/shared/SignUp'
  * https://stackoverflow.com/questions/71885505/react-router-v6-no-routes-matched-location
  */
 
-const Home = () => (
-  <>
-    <Books />
-  </>
-)
+const Home = () => <Books />
 const Logout = () => (
   <ul>
     <li>You have successfully logged out!</li>
