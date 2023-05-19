@@ -91,7 +91,7 @@ export default function AuthorForm() {
 
             <TextField
               label="Name"
-              name="authorName"
+              name="name"
               onChange={(e) => setName(e.target.value)}
               required
               variant="outlined"
@@ -105,6 +105,7 @@ export default function AuthorForm() {
             <Button variant="outlined" color="secondary" type="submit">
               Add
             </Button>
+            {authors.error ? <span>{authors.error}</span> : ''}
           </form>
         </Grid>
       </Grid>

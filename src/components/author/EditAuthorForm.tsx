@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import AdminNav from '../admin/AdminNav'
 import type { RootState, AppDispatch } from '../../store'
-import { fetchAuthorsThunk, editAuthor, deleteAuthor } from '../../features/authors/authorsSlice'
+import {
+  fetchAuthorsThunk,
+  editAuthorThunk,
+  deleteAuthor
+} from '../../features/authors/authorsSlice'
 import { Author } from '../../type'
 
 //mui
@@ -47,7 +51,7 @@ export default function EditAuthorForm(props: Author) {
       setNameError(true)
     }
     if (newAuthor.name) {
-      dispatch(editAuthor(newAuthor))
+      dispatch(editAuthorThunk(newAuthor))
       //;<Link to="/adminDashboard">Go back to dashboard</Link>
     }
   }
@@ -64,7 +68,7 @@ export default function EditAuthorForm(props: Author) {
 
         <TextField
           label="Name"
-          name="authorName"
+          name="name"
           onChange={handleChange}
           required
           variant="outlined"
@@ -76,6 +80,7 @@ export default function EditAuthorForm(props: Author) {
           placeholder="placeholder"
           //error={nameError}
         />
+        {authors.error ? <span>{authors.error}</span> : ''}
         <Button variant="outlined" color="secondary" type="submit">
           Submit
         </Button>

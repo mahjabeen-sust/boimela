@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import AdminNav from '../admin/AdminNav'
 import type { RootState, AppDispatch } from '../../store'
-import { fetchAuthorsThunk, editAuthor, deleteAuthor } from '../../features/authors/authorsSlice'
+import { fetchAuthorsThunk, deleteAuthorThunk } from '../../features/authors/authorsSlice'
 import EditAuthorForm from './EditAuthorForm'
 
 //mui
@@ -26,6 +26,11 @@ export default function EditAuthor() {
     if (author.id === updateAuthorId) return author
   })
   //console.log('author to be updated', authorToBeUpdated)
+
+  const deleteAction = (id: number) => {
+    setupdateAuthorId(id)
+    dispatch(deleteAuthorThunk(id))
+  }
 
   useEffect(() => {
     dispatch(fetchAuthorsThunk())
@@ -67,10 +72,15 @@ export default function EditAuthor() {
                     <Button
                       size="small"
                       onClick={() => {
-                        dispatch(deleteAuthor(author.id))
+                        deleteAction(author.id)
                       }}>
                       Delete
                     </Button>
+                    {authors.error && authorToBeUpdated?.id == author.id ? (
+                      <span className="error">{authors.error}</span>
+                    ) : (
+                      ''
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
