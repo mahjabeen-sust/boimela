@@ -2,26 +2,25 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-import { Author } from '../../type'
+import { Category } from '../../type'
 
-export interface authorState {
-  items: Author[]
+export interface categoryState {
+  items: Category[]
   isLoading: boolean
   error: string | null
 }
 
-const initialState: authorState = {
+const initialState: categoryState = {
   items: [],
   isLoading: false,
   error: null
 }
 
-//const AUTHORS_PLACEHOLDER_API = 'http://localhost:3000/authors.json'
-const AUTHORS_PLACEHOLDER_API = 'https://boimela.netlify.app/authors.json'
+//const categoryS_PLACEHOLDER_API = 'http://localhost:3000/categorys.json'
 
 // axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL || 'https://pmapi.bluewindlab.com'
 
-export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async () => {
+export const fetchCategoryThunk = createAsyncThunk('categories/fetch', async () => {
   const token = localStorage.getItem('token')
 
   let config = {
@@ -29,16 +28,16 @@ export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async () => {
       Authorization: 'Bearer ' + token
     }
   }
-  const response = await axios.get('http://localhost:8080/api/v1/authors/', config)
-  const data: Author[] = await response.data
-  //console.log('Found authors', data)
+  const response = await axios.get('http://localhost:8080/api/v1/categories/', config)
+  const data: Category[] = await response.data
+  //console.log('Found categorys', data)
   return data
 })
 
-export const addNewAuthorThunk = createAsyncThunk(
-  'authors/add',
-  async (author: { name: string }) => {
-    //console.log(author)
+export const addNewCategoryThunk = createAsyncThunk(
+  'categories/add',
+  async (category: { name: string }) => {
+    //console.log(category)
     const token = localStorage.getItem('token')
 
     const headers = {
@@ -48,7 +47,7 @@ export const addNewAuthorThunk = createAsyncThunk(
 
     // Make the Axios request
     const response = await axios
-      .post('http://localhost:8080/api/v1/authors/', author, {
+      .post('http://localhost:8080/api/v1/categories/', category, {
         headers
       })
       .catch(function (error) {
@@ -82,10 +81,10 @@ export const addNewAuthorThunk = createAsyncThunk(
   }
 )
 
-//edit author thunk
-export const editAuthorThunk = createAsyncThunk(
-  'authors/edit',
-  async (author: { id: number; name: string }) => {
+//edit category thunk
+export const editCategoryThunk = createAsyncThunk(
+  'categories/edit',
+  async (category: { id: number; name: string }) => {
     const token = localStorage.getItem('token')
 
     const headers = {
@@ -95,7 +94,7 @@ export const editAuthorThunk = createAsyncThunk(
 
     // Make the Axios request
     const response = await axios
-      .put(`http://localhost:8080/api/v1/authors/${author.id}`, author, {
+      .put(`http://localhost:8080/api/v1/categories/${category.id}`, category, {
         headers
       })
       .catch(function (error) {
@@ -119,8 +118,8 @@ export const editAuthorThunk = createAsyncThunk(
   }
 )
 
-//edit author thunk
-export const deleteAuthorThunk = createAsyncThunk('authors/delete', async (id: number) => {
+//edit category thunk
+export const deleteCategoryThunk = createAsyncThunk('categories/delete', async (id: number) => {
   const token = localStorage.getItem('token')
 
   const headers = {
@@ -130,7 +129,7 @@ export const deleteAuthorThunk = createAsyncThunk('authors/delete', async (id: n
 
   // Make the Axios request
   const response = await axios
-    .delete(`http://localhost:8080/api/v1/authors/${id}`, {
+    .delete(`http://localhost:8080/api/v1/categories/${id}`, {
       headers
     })
     .catch(function (error) {
@@ -154,35 +153,35 @@ export const deleteAuthorThunk = createAsyncThunk('authors/delete', async (id: n
 })
 
 //SLICE
-export const authorsSlice = createSlice({
-  name: 'authors',
+export const categorySlice = createSlice({
+  name: 'categories',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchAuthorsThunk.pending, (state, action) => {
+    builder.addCase(fetchCategoryThunk.pending, (state, action) => {
       state.isLoading = true
     })
-    builder.addCase(fetchAuthorsThunk.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(fetchCategoryThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
       //state.error = action.payload
       state.error = 'Something went wrong ...'
     })
-    builder.addCase(fetchAuthorsThunk.fulfilled, (state, action: PayloadAction<Author[]>) => {
+    builder.addCase(fetchCategoryThunk.fulfilled, (state, action: PayloadAction<Category[]>) => {
       state.isLoading = false
       state.items = action.payload
     })
 
-    //adding authors reducers
-    builder.addCase(addNewAuthorThunk.pending, (state, action) => {
+    //adding categorys reducers
+    builder.addCase(addNewCategoryThunk.pending, (state, action) => {
       state.isLoading = true
     })
 
-    builder.addCase(addNewAuthorThunk.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(addNewCategoryThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
       state.error = action.payload
       //state.error = 'Something went wrong ...'
     })
-    builder.addCase(addNewAuthorThunk.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(addNewCategoryThunk.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload?.status == 200) {
         state.items = [action.payload.data, ...state.items]
         state.error = null
@@ -190,19 +189,19 @@ export const authorsSlice = createSlice({
         state.error = action.payload?.data
       }
 
-      //console.log('inside addnewauthorThunk reducer>payload: ', action.payload)
+      //console.log('inside addnewcategoryThunk reducer>payload: ', action.payload)
     })
 
-    //edit author thunk reducers
-    builder.addCase(editAuthorThunk.pending, (state) => {
+    //edit category thunk reducers
+    builder.addCase(editCategoryThunk.pending, (state) => {
       state.isLoading = true
     })
 
-    builder.addCase(editAuthorThunk.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(editCategoryThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
       state.error = action.payload.data
     })
-    builder.addCase(editAuthorThunk.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(editCategoryThunk.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload?.status == 200) {
         state.error = null
         state.items = state.items.map((item) => {
@@ -217,16 +216,16 @@ export const authorsSlice = createSlice({
       }
     })
 
-    //delet author thunk reducers
-    builder.addCase(deleteAuthorThunk.pending, (state) => {
+    //delet category thunk reducers
+    builder.addCase(deleteCategoryThunk.pending, (state) => {
       state.isLoading = true
     })
 
-    builder.addCase(deleteAuthorThunk.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(deleteCategoryThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
       state.error = action.payload.data
     })
-    builder.addCase(deleteAuthorThunk.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(deleteCategoryThunk.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload?.status == 200) {
         state.error = null
         state.items = state.items.filter((prev) => prev.id !== action.payload.data.id)
@@ -237,4 +236,4 @@ export const authorsSlice = createSlice({
   }
 })
 
-export default authorsSlice.reducer
+export default categorySlice.reducer

@@ -3,37 +3,37 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import AdminNav from '../admin/AdminNav'
 import type { RootState, AppDispatch } from '../../store'
-import { fetchAuthorsThunk, editAuthorThunk } from '../../features/authors/authorsSlice'
-import { Author } from '../../type'
+import { fetchCategoryThunk, editCategoryThunk } from '../../features/category/categorySlice'
+import { Category } from '../../type'
 
 //mui
 import { TextField, Button } from '@mui/material'
 import Grid from '@mui/material/Grid'
 
-export default function EditAuthorForm(props: Author) {
+export default function EditcategoryForm(props: Category) {
   const dispatch = useDispatch<AppDispatch>()
-  const { authors } = useSelector((state: RootState) => state)
+  const { categories } = useSelector((state: RootState) => state)
   //console.log('Received as props:', props)
 
-  const [newAuthor, setNewAuthor] = useState({
+  const [newCategory, setNewCategory] = useState({
     id: props.id,
     name: props.name
   })
-  if (newAuthor.id !== props.id) {
-    setNewAuthor((prev) => ({
+  if (newCategory.id !== props.id) {
+    setNewCategory((prev) => ({
       ...prev,
       id: props.id,
       name: props.name
     }))
   }
 
-  //console.log('newAuthor from props:', newAuthor)
+  //console.log('newcategory from props:', newcategory)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
     let name = e.target.name
     // console.log(value)
-    setNewAuthor((prev) => ({
+    setNewCategory((prev) => ({
       ...prev,
       [name]: value
     }))
@@ -43,24 +43,24 @@ export default function EditAuthorForm(props: Author) {
     e.preventDefault()
     //from mui example
     setNameError(false)
-    if (newAuthor.name == '') {
+    if (newCategory.name == '') {
       setNameError(true)
     }
-    if (newAuthor.name) {
-      dispatch(editAuthorThunk(newAuthor))
+    if (newCategory.name) {
+      dispatch(editCategoryThunk(newCategory))
       //;<Link to="/adminDashboard">Go back to dashboard</Link>
     }
   }
   const [nameError, setNameError] = useState(false)
 
   useEffect(() => {
-    dispatch(fetchAuthorsThunk())
+    dispatch(fetchCategoryThunk())
   }, [])
 
   return (
     <React.Fragment>
-      <form action="" className="authorEditForm" onSubmit={handleSubmit}>
-        <h2>Edit Author</h2>
+      <form action="" className="categoryEditForm" onSubmit={handleSubmit}>
+        <h2>Edit category</h2>
 
         <TextField
           label="Name"
@@ -72,11 +72,11 @@ export default function EditAuthorForm(props: Author) {
           type="text"
           sx={{ mb: 3 }}
           fullWidth
-          value={newAuthor.name}
+          value={newCategory.name}
           placeholder="placeholder"
           //error={nameError}
         />
-        {authors.error ? <span>{authors.error}</span> : ''}
+        {categories.error ? <span>{categories.error}</span> : ''}
         <Button variant="outlined" color="secondary" type="submit">
           Submit
         </Button>

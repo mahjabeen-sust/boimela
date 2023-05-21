@@ -60,6 +60,22 @@ export const AdminNavLists = (
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
+        <PersonAddAlt1TwoToneIcon />
+      </ListItemIcon>
+      <Link to="/addCategory">
+        <ListItemText primary="Add New Category" />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <ListItemIcon>
+        <ManageAccountsTwoToneIcon />
+      </ListItemIcon>
+      <Link to="/updateCategory">
+        <ListItemText primary="Update Category" />
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <Link to="/manageUser">
