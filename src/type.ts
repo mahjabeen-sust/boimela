@@ -1,5 +1,3 @@
-import React from 'react'
-
 export type User = {
   firstName: string
   lastName: string
@@ -12,13 +10,22 @@ export type Book = {
   isbn: string
   title: string
   description: string
-  publisher: string
-  authors: string
-  status: boolean
-  borrowerId: string | null
-  publishDate: string
-  borrowDate: Date | string | null
-  returnDate: Date | string | null
+  publishers: string
+  category: Category
+  authorList: Author[]
+  status: string
+  publishedDate: string
+}
+
+export type BookDTO = {
+  isbn: string
+  title: string
+  description: string
+  publishers: string
+  categoryId: string
+  authorIdList: string[]
+  status: string
+  publishedDate: string
 }
 
 export type Author = {

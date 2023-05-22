@@ -22,14 +22,7 @@ const AUTHORS_PLACEHOLDER_API = 'https://boimela.netlify.app/authors.json'
 // axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL || 'https://pmapi.bluewindlab.com'
 
 export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async () => {
-  const token = localStorage.getItem('token')
-
-  let config = {
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
-  }
-  const response = await axios.get('http://localhost:8080/api/v1/authors/', config)
+  const response = await axios.get('http://localhost:8080/api/v1/authors/')
   const data: Author[] = await response.data
   //console.log('Found authors', data)
   return data

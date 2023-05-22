@@ -27,13 +27,13 @@ const Item = styled('div')(({ theme }) => ({
 
 const Books = () => {
   const { books } = useSelector((state: RootState) => state)
-  //console.log('length of book object', books.items.length)
+  //console.log('books', books.items)
   const dispatch = useDispatch<AppDispatch>()
 
   //commenting for cors problem, will uncomment later
-  // useEffect(() => {
-  //   dispatch(fetchBooksThunk())
-  // }, [])
+  useEffect(() => {
+    dispatch(fetchBooksThunk())
+  }, [])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -53,10 +53,16 @@ const Books = () => {
                   {book.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  By - {book.authors}
+                  By -
+                  {book.authorList.map((author) => (
+                    <span key={author.id}>{author.name} </span>
+                  ))}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Publisher :{book.publisher}
+                  Category - {book.category.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Publisher :{book.publishers}
                 </Typography>
                 <Typography gutterBottom component="span">
                   {book.status ? 'Available' : 'Borrowed'}

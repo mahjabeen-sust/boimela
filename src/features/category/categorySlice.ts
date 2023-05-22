@@ -21,14 +21,7 @@ const initialState: categoryState = {
 // axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL || 'https://pmapi.bluewindlab.com'
 
 export const fetchCategoryThunk = createAsyncThunk('categories/fetch', async () => {
-  const token = localStorage.getItem('token')
-
-  let config = {
-    headers: {
-      Authorization: 'Bearer ' + token
-    }
-  }
-  const response = await axios.get('http://localhost:8080/api/v1/categories/', config)
+  const response = await axios.get('http://localhost:8080/api/v1/categories/')
   const data: Category[] = await response.data
   //console.log('Found categorys', data)
   return data

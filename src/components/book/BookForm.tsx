@@ -1,13 +1,14 @@
 import React, { useState, useEffect, ChangeEvent } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Grid from '@mui/material/Grid'
-import Datepicker from 'react-datepicker'
+
 import 'react-datepicker/dist/react-datepicker.css'
 
 import AdminNav from '../admin/AdminNav'
 import type { AppDispatch, RootState } from '../../store'
-import { fetchBooksThunk, addNewBook } from '../../features/books/booksSlice'
+import { fetchBooksThunk, addNewBook, addNewBookThunk } from '../../features/books/booksSlice'
 import { fetchAuthorsThunk } from '../../features/authors/authorsSlice'
+import { fetchCategoryThunk } from '../../features/category/categorySlice'
 import Books from './Books'
 
 //mui
@@ -17,22 +18,44 @@ import { date } from 'zod'
 
 const BookForm = () => {
   const { authors } = useSelector((state: RootState) => state)
-  const [startDate, setStartDate] = useState(new Date())
+  const { categories } = useSelector((state: RootState) => state)
+
+  // var oldString = 'mystring'
+  // var mynewarray = oldString.split('\0')
+  // console.log('My New Array Output is', mynewarray)
 
   const [newBook, setNewBook] = useState({
     isbn: '',
     title: '',
     description: '',
-    publisher: '',
-    authors: '',
-    status: true,
-    borrowerId: null,
-    publishDate: new Date().toISOString().slice(0, 7).replace('/-/gi', '/'),
-    borrowDate: null,
-    returnDate: null
+    publishers: '',
+    categoryId: '',
+    authorIdList: [''],
+    status: 'AVAILABLE',
+    publishedDate: new Date().toISOString().slice(0, 7).replace('/-/gi', '/')
   })
 
   const dispatch = useDispatch<AppDispatch>()
+
+  const [checkboxes, setCheckboxes] = useState<any[]>([])
+
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target
+    if (checked) {
+      // Add the value to the array
+      setCheckboxes([...checkboxes, value])
+    } else {
+      // Remove the value from the array
+      setCheckboxes(checkboxes.filter((item) => item !== value))
+    }
+    //console.log('checkbox added > ', checkboxes)
+  }
+
+  const handleAuthorChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value
+    newBook.authorIdList = value.split('\0')
+    //console.log('authorIdList> ', newBook.authorIdList)
+  }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
@@ -59,7 +82,10 @@ const BookForm = () => {
     }
 
     if (newBook.title && newBook.description) {
-      dispatch(addNewBook(newBook))
+      //adding the ckeboxes to authorIdList
+      newBook.authorIdList = checkboxes
+      //console.log('newbook: ', newBook)
+      dispatch(addNewBookThunk(newBook))
       //;<Link to="/adminDashboard">Go back to dashboard</Link>
     }
   }
@@ -71,6 +97,7 @@ const BookForm = () => {
   useEffect(() => {
     dispatch(fetchBooksThunk())
     dispatch(fetchAuthorsThunk())
+    dispatch(fetchCategoryThunk())
   }, [])
 
   return (
@@ -84,7 +111,7 @@ const BookForm = () => {
           <AdminNav />
         </Grid>
         <Grid item xs={9} className="pl-24">
-          <Books />
+          {/* <Books /> */}
 
           <form action="" className="bookForm" onSubmit={handleSubmit}>
             <h2>Add New Book</h2>
@@ -130,8 +157,8 @@ const BookForm = () => {
               sx={{ mb: 3 }}
             />
             <TextField
-              label="Publisher"
-              name="publisher"
+              label="Publishers"
+              name="publishers"
               onChange={handleChange}
               required
               variant="outlined"
@@ -139,27 +166,37 @@ const BookForm = () => {
               type="text"
               sx={{ mb: 3 }}
               fullWidth
-              value={newBook.publisher}
+              value={newBook.publishers}
               //error={titleError}
             />
-            <InputLabel id="author-add-label">Authors</InputLabel>
+
+            <InputLabel id="category-add-label">Category</InputLabel>
             <Select
-              label="Authors"
-              name="authors"
-              value={newBook.authors}
+              label="Category"
+              name="categoryId"
+              value={newBook.categoryId}
               required
               //onChange={handleChange} //this works
               onChange={(event) => handleChange(event as any)}>
-              {/* <MenuItem value={newBook.authors} selected>
-                {newBook.authors}
-              </MenuItem> */}
-              {authors.items.map((author) => (
-                <MenuItem value={author.authorName}>{author.authorName}</MenuItem>
+              {categories.items.map((category) => (
+                <MenuItem value={category.id}>{category.name}</MenuItem>
               ))}
-              {/* <MenuItem value="author1">Author1</MenuItem>
-              <MenuItem value="author2">Author2</MenuItem>
-              <MenuItem value="author3">Author3</MenuItem> */}
             </Select>
+
+            <InputLabel id="author-add-label">Authors</InputLabel>
+
+            {authors.items.map((author) => (
+              <div>
+                <input
+                  type="checkbox"
+                  value={author.id}
+                  checked={checkboxes.includes(author.id.toString())}
+                  onChange={handleCheckboxChange}
+                />
+                {author.name}
+              </div>
+            ))}
+            {/* <div>Selected options: {checkboxes.join(', ')}</div> */}
 
             <InputLabel id="status-add-label">Status</InputLabel>
             <Select
@@ -170,22 +207,21 @@ const BookForm = () => {
               value={newBook.status}
               //onChange={handleChange} //this works
               onChange={(event) => handleChange(event as any)}>
-              <MenuItem value={newBook.status as any} selected>
-                {newBook.status}
+              <MenuItem value="AVAILABLE" selected>
+                AVAILABLE
               </MenuItem>
-              <MenuItem value={true as any}>Available</MenuItem>
-              <MenuItem value={false as any}>Borrowed</MenuItem>
+              <MenuItem value="BORROWED">BORROWED</MenuItem>
             </Select>
 
             <TextField
               type="date"
-              name="publishDate"
-              id="publish-date"
+              name="publishedDate"
+              id="publishedDate"
               variant="outlined"
               color="secondary"
               label="Publish Date"
               onChange={handleChange}
-              value={newBook.publishDate}
+              value={newBook.publishedDate}
               fullWidth
               required
               sx={{ mb: 4, mt: 4 }}

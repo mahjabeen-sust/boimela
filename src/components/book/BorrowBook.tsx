@@ -27,10 +27,11 @@ const Item = styled('div')(({ theme }) => ({
 
 const BorrowBook = () => {
   const { books } = useSelector((state: RootState) => state)
+  //console.log('books', books.items)
   const dispatch = useDispatch<AppDispatch>()
 
   //check if user is admin
-  const loggedInUser = useSelector((state: RootState) => state.auth.loggedInUser)
+  const loggedInUser = useSelector((state: RootState) => state.auth.user.username)
 
   useEffect(() => {
     dispatch(fetchBooksThunk())
@@ -49,11 +50,11 @@ const BorrowBook = () => {
       isbn: bookToBeBorrowed?.isbn,
       title: bookToBeBorrowed?.title,
       description: bookToBeBorrowed?.description,
-      publisher: bookToBeBorrowed?.publisher,
-      authors: bookToBeBorrowed?.authors,
+      publishers: bookToBeBorrowed?.publishers,
+      authors: bookToBeBorrowed?.authorList,
       status: false,
       publishDate: bookToBeBorrowed?.publishDate,
-      borrowerId: loggedInUser?.email,
+      borrowerId: loggedInUser,
       borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
       returnDate: null
     }
@@ -83,10 +84,16 @@ const BorrowBook = () => {
                     {book.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    By - {book.authors}
+                    By -
+                    {book.authorList.map((author) => (
+                      <span key={author.id}>{author.name}</span>
+                    ))}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Publisher :{book.publisher}
+                    Category - {book.category.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Publisher :{book.publishers}
                   </Typography>
 
                   <Typography gutterBottom variant="button" component="span">

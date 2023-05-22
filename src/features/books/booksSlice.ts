@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import axios from 'axios'
 
-import { Book, User } from '../../type'
+import { Book, BookDTO, User } from '../../type'
 
 export interface BookState {
   items: Book[]
@@ -23,12 +24,57 @@ const BOOKS_PLACEHOLDER_API = 'https://boimela.netlify.app/books-small.json'
 
 export const fetchBooksThunk = createAsyncThunk('books/fetch', async (data, thunkApi) => {
   try {
-    const response = await fetch(BOOKS_PLACEHOLDER_API)
-    const data: Book[] = await response.json()
+    const response = await axios.get('http://localhost:8080/api/v1/books/')
+    const data: Book[] = await response.data
     //console.log('Found books', data)
     return data
   } catch (error: any) {
     return thunkApi.rejectWithValue(error.message)
+  }
+})
+
+//add new book thunk
+export const addNewBookThunk = createAsyncThunk('books/add', async (book: BookDTO) => {
+  //console.log(author)
+  const token = localStorage.getItem('token')
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + token
+  }
+
+  // Make the Axios request
+  const response = await axios
+    .post('http://localhost:8080/api/v1/books/', book, {
+      headers
+    })
+    .catch(function (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        // console.log('error.response.data > ', error.response.data)
+        // console.log('error.response.status > ', error.response.status)
+        // console.log('error.response.headers > ', error.response.headers)
+
+        return {
+          status: error.response.status,
+          data: error.response.data
+        }
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.log('error.request > ', error.request)
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message)
+      }
+      console.log('error.config', error.config)
+    })
+  //console.log('response', response)
+  return {
+    status: response?.status,
+    data: response?.data
   }
 })
 
@@ -38,7 +84,7 @@ export const booksSlice = createSlice({
   initialState,
   reducers: {
     addNewBook: (state, action: PayloadAction<Book>) => {
-      //state.items.concat(action.payload) //not wokring
+      console.log('inside addNewBook reducer: action payload > ', action.payload)
 
       state.items = [action.payload, ...state.items]
       //console.log('inside addnewbook reducer>state.items: ', state.items)
@@ -70,6 +116,27 @@ export const booksSlice = createSlice({
     builder.addCase(fetchBooksThunk.fulfilled, (state, action: PayloadAction<Book[]>) => {
       state.isLoading = false
       state.items = action.payload
+    })
+    //addBook
+    //adding authors reducers
+    builder.addCase(addNewBookThunk.pending, (state, action) => {
+      state.isLoading = true
+    })
+
+    builder.addCase(addNewBookThunk.rejected, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
+      state.error = action.payload
+      //state.error = 'Something went wrong ...'
+    })
+    builder.addCase(addNewBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      if (action.payload?.status == 200) {
+        state.items = [action.payload.data, ...state.items]
+        state.error = null
+      } else {
+        state.error = action.payload?.data
+      }
+
+      //console.log('inside addnewauthorThunk reducer>payload: ', action.payload)
     })
   }
 })
