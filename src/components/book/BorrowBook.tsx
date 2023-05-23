@@ -13,7 +13,7 @@ import Grid from '@mui/system/Unstable_Grid'
 import styled from '@mui/system/styled'
 
 import type { RootState, AppDispatch } from '../../store'
-import { fetchBooksThunk, editBook } from '../../features/books/booksSlice'
+import { fetchBooksThunk } from '../../features/books/booksSlice'
 import { Book } from '../../type'
 
 const Item = styled('div')(({ theme }) => ({
@@ -53,7 +53,7 @@ const BorrowBook = () => {
       publishers: bookToBeBorrowed?.publishers,
       authors: bookToBeBorrowed?.authorList,
       status: false,
-      publishDate: bookToBeBorrowed?.publishDate,
+      publishDate: bookToBeBorrowed?.publishedDate,
       borrowerId: loggedInUser,
       borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
       returnDate: null
@@ -62,7 +62,7 @@ const BorrowBook = () => {
     //console.log('book to be borrowed:', borrowedBook)
     //dispatch the borrowBook
 
-    dispatch(editBook(borrowedBook as any))
+    //dispatch(editBook(borrowedBook as any))
   }
 
   return (

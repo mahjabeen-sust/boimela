@@ -2,9 +2,10 @@ import React, { useState, ChangeEvent, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import type { AppDispatch, RootState } from '../../store'
-import { editBook } from '../../features/books/booksSlice'
+import { fetchBooksThunk, editBookThunk } from '../../features/books/booksSlice'
 import { Book } from '../../type'
 import { fetchAuthorsThunk } from '../../features/authors/authorsSlice'
+import { fetchCategoryThunk } from '../../features/category/categorySlice'
 
 //mui
 import { TextField, Button, InputLabel, Select, MenuItem } from '@mui/material'
@@ -24,8 +25,10 @@ function formatTheDate(dateString: string) {
 }
 
 function EditBookForm(props: Book) {
-  //console.log('received book', props)
+  const { books } = useSelector((state: RootState) => state)
   const { authors } = useSelector((state: RootState) => state)
+  const { categories } = useSelector((state: RootState) => state)
+  const authorIdList = props.authorList.map((author) => author.id)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -34,37 +37,56 @@ function EditBookForm(props: Book) {
     isbn: props.isbn,
     title: props.title,
     description: props.description,
-    publisher: props.publisher,
-    authors: props.authors,
+    publishers: props.publishers,
+    categoryId: props.category.id,
+    authorIdList: authorIdList,
     status: props.status,
-    borrowerId: props.borrowerId,
-    //publishDate: props.publishDate,
-    publishDate: formatTheDate(props.publishDate),
-    borrowDate: props.borrowDate,
-    returnDate: props.returnDate
+    publishedDate: props.publishedDate
+
+    //publishedDate: formatTheDate(props.publishedDate)
   })
 
+  //to change the props value dynamically when the 'Edit' button is clicked next to each book!
   if (newBook.isbn !== props.isbn) {
     setNewBook((prev) => ({
       ...prev,
       isbn: props.isbn,
       title: props.title,
       description: props.description,
-      publisher: props.publisher,
-      authors: props.authors,
+      publishers: props.publishers,
+      categoryId: props.category.id,
+      authorIdList: authorIdList,
       status: props.status,
-      borrowerId: props.borrowerId,
-      //publishDate: props.publishDate,
-      publishDate: formatTheDate(props.publishDate),
-      borrowDate: props.borrowDate,
-      returnDate: props.returnDate
+      publishedDate: props.publishedDate
+
+      //publishedDate: formatTheDate(props.publishedDate)
     }))
   }
 
-  console.log('newBook: ', newBook)
+  //console.log('newBook: ', newBook)
 
   // R:8/17/2022
   // Req: 2023-08-10
+  //filtering the prop values for checkboxes
+
+  const filteredAuthors = authors.items.filter((value) => {
+    return !props.authorList.some((Obj) => Obj.id === value.id)
+  })
+
+  const [checkboxes, setCheckboxes] = useState<any[]>(authorIdList)
+
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target
+    if (checked) {
+      // Add the value to the array
+      setCheckboxes((checkboxes) => [...checkboxes, value])
+    } else {
+      // Remove the value from the array
+      setCheckboxes((checkboxes) => checkboxes.filter((item) => item !== value))
+    }
+    //console.log('checkbox added > ', checkboxes)
+  }
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value
     let name = e.target.name
@@ -89,7 +111,9 @@ function EditBookForm(props: Book) {
     }
 
     if (newBook.title && newBook.description) {
-      dispatch(editBook(newBook))
+      newBook.authorIdList = checkboxes
+      dispatch(editBookThunk(newBook))
+      //console.log('book to be edited: ', newBook)
     }
 
     //console.log('after handle edit', books.items)
@@ -98,6 +122,12 @@ function EditBookForm(props: Book) {
   //from mui example
   const [titleError, setTitleError] = useState(false)
   const [descriptionError, setDescriptionError] = useState(false)
+
+  useEffect(() => {
+    dispatch(fetchBooksThunk())
+    dispatch(fetchAuthorsThunk())
+    dispatch(fetchCategoryThunk())
+  }, [])
 
   return (
     <React.Fragment>
@@ -108,6 +138,7 @@ function EditBookForm(props: Book) {
           label="ISBN"
           name="isbn"
           onChange={handleChange}
+          disabled
           required
           variant="outlined"
           color="secondary"
@@ -145,8 +176,8 @@ function EditBookForm(props: Book) {
           sx={{ mb: 3 }}
         />
         <TextField
-          label="Publisher"
-          name="publisher"
+          label="Publishers"
+          name="publishers"
           onChange={handleChange}
           required
           variant="outlined"
@@ -154,28 +185,51 @@ function EditBookForm(props: Book) {
           type="text"
           sx={{ mb: 3 }}
           fullWidth
-          value={newBook.publisher}
+          value={newBook.publishers}
           //error={titleError}
         />
-        <InputLabel id="author-edit-label">Authors</InputLabel>
+        <InputLabel id="category-add-label">Category</InputLabel>
         <Select
-          label="Authors"
-          name="authors"
-          value={newBook.authors}
+          label="Category"
+          name="categoryId"
+          value={newBook.categoryId}
           required
-          labelId="author-edit-label"
-          id="author-edit-select"
+          //onChange={handleChange} //this works
           onChange={(event) => handleChange(event as any)}>
-          <MenuItem value={newBook.authors} selected>
-            {newBook.authors}
+          <MenuItem value={newBook.categoryId} selected>
+            {props.category.name}
           </MenuItem>
-          {authors.items.map((author) => (
-            <MenuItem value={author.authorName}>{author.authorName}</MenuItem>
+          {categories.items.map((category) => (
+            <MenuItem value={category.id}>{category.name}</MenuItem>
           ))}
-          {/* <MenuItem value="author1">Author1</MenuItem>
-          <MenuItem value="author2">Author2</MenuItem>
-          <MenuItem value="author3">Author3</MenuItem> */}
         </Select>
+        <InputLabel id="author-add-label">Authors</InputLabel>
+        {/* first defaultchecked the authors from editable book */}
+        {props.authorList.map((author) => (
+          <div>
+            <input
+              type="checkbox"
+              value={author.id}
+              defaultChecked
+              onChange={handleCheckboxChange}
+            />
+            {author.name}
+          </div>
+        ))}
+
+        {/* now the rest of the authors from state.authors*/}
+
+        {filteredAuthors.map((author) => (
+          <div>
+            <input
+              type="checkbox"
+              value={author.id}
+              checked={checkboxes.includes(author.id.toString())}
+              onChange={handleCheckboxChange}
+            />
+            {author.name}
+          </div>
+        ))}
 
         <InputLabel id="status-edit-label">Status</InputLabel>
         <Select
@@ -187,49 +241,40 @@ function EditBookForm(props: Book) {
           value={newBook.status}
           onChange={(event) => handleChange(event as any)}
           sx={{ mb: 2 }}>
-          <MenuItem value={newBook.status as any} selected>
+          <MenuItem value={newBook.status} selected>
             {newBook.status}
           </MenuItem>
-          <MenuItem value={true as any}>Available</MenuItem>
-          <MenuItem value={false as any}>Borrowed</MenuItem>
+          <MenuItem value="AVAILABLE">AVAILABLE</MenuItem>
+          <MenuItem value="BORROWED">BORROWED</MenuItem>
         </Select>
 
         <TextField
-          type="date"
-          name="publishDate"
+          type="text"
+          name="publishedDate"
           id="publish-date-edit"
           variant="outlined"
           color="secondary"
           label="Publish Date"
           onChange={handleChange}
-          value={newBook.publishDate}
+          value={newBook.publishedDate}
           // value="2023-08-10"
           fullWidth
           required
           sx={{ mb: 4 }}
         />
+
         {/* <TextField
           type="date"
-          name="borrowDate"
-          id="borrow-date-edit"
+          name="publishedDate"
+          id="publish-date-edit"
           variant="outlined"
           color="secondary"
-          label="Borrow Date"
+          label="Publish Date"
           onChange={handleChange}
-          value={newBook.borrowDate}
+          value={newBook.publishedDate}
+          // value="2023-08-10"
           fullWidth
-          sx={{ mb: 4 }}
-        />
-        <TextField
-          type="date"
-          name="returnDate"
-          id="return-date-edit"
-          variant="outlined"
-          color="secondary"
-          label="Return Date"
-          onChange={handleChange}
-          value={newBook.returnDate}
-          fullWidth
+          required
           sx={{ mb: 4 }}
         /> */}
 
@@ -237,6 +282,8 @@ function EditBookForm(props: Book) {
         <Button variant="outlined" color="secondary" type="submit">
           Submit
         </Button>
+        {books.error ? <span className="error">{books.error}</span> : ''}
+        {books.status == '200' ? <span className="success">Book Updated Succesfully!</span> : ''}
       </form>
     </React.Fragment>
   )

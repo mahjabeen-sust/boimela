@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import AdminNav from '../admin/AdminNav'
 import type { AppDispatch, RootState } from '../../store'
-import { fetchBooksThunk, addNewBook, addNewBookThunk } from '../../features/books/booksSlice'
+import { fetchBooksThunk, addNewBookThunk } from '../../features/books/booksSlice'
 import { fetchAuthorsThunk } from '../../features/authors/authorsSlice'
 import { fetchCategoryThunk } from '../../features/category/categorySlice'
 import Books from './Books'
@@ -44,18 +44,12 @@ const BookForm = () => {
     const { value, checked } = event.target
     if (checked) {
       // Add the value to the array
-      setCheckboxes([...checkboxes, value])
+      setCheckboxes((checkboxes) => [...checkboxes, value])
     } else {
       // Remove the value from the array
-      setCheckboxes(checkboxes.filter((item) => item !== value))
+      setCheckboxes((checkboxes) => checkboxes.filter((item) => item !== value))
     }
     //console.log('checkbox added > ', checkboxes)
-  }
-
-  const handleAuthorChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value
-    newBook.authorIdList = value.split('\0')
-    //console.log('authorIdList> ', newBook.authorIdList)
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

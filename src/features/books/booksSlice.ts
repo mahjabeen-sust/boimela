@@ -80,32 +80,79 @@ export const addNewBookThunk = createAsyncThunk('books/add', async (book: BookDT
   }
 })
 
+//edit book thunk
+export const editBookThunk = createAsyncThunk('books/edit', async (book: BookDTO) => {
+  const token = localStorage.getItem('token')
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + token
+  }
+
+  // Make the Axios request
+  const response = await axios
+    .put(`http://localhost:8080/api/v1/books/${book.isbn}`, book, {
+      headers
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return {
+          status: error.response.status,
+          data: error.response.data
+        }
+      } else if (error.request) {
+        console.log('error.request > ', error.request)
+      } else {
+        console.log('Error', error.message)
+      }
+      console.log('error.config', error.config)
+    })
+  //console.log('response', response)
+  return {
+    status: response?.status,
+    data: response?.data
+  }
+})
+
+//delete author thunk
+export const deleteBookThunk = createAsyncThunk('books/delete', async (isbn: string) => {
+  const token = localStorage.getItem('token')
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + token
+  }
+
+  // Make the Axios request
+  const response = await axios
+    .delete(`http://localhost:8080/api/v1/books/${isbn}`, {
+      headers
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return {
+          status: error.response.status,
+          data: error.response.data
+        }
+      } else if (error.request) {
+        console.log('error.request > ', error.request)
+      } else {
+        console.log('Error', error.message)
+      }
+      console.log('error.config', error.config)
+    })
+  //console.log('response', response)
+  return {
+    status: response?.status,
+    data: response?.data
+  }
+})
+
 //SLICE
 export const booksSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {
-    addNewBook: (state, action: PayloadAction<Book>) => {
-      console.log('inside addNewBook reducer: action payload > ', action.payload)
-
-      state.items = [action.payload, ...state.items]
-      //console.log('inside addnewbook reducer>state.items: ', state.items)
-    },
-    deleteBook: (state, action: PayloadAction<string>) => {
-      //console.log('action.payload =', action.payload) // returns correct id
-      state.items = state.items.filter((prev) => prev.isbn !== action.payload)
-    },
-    editBook: (state, action: PayloadAction<Book>) => {
-      //console.log('action payload', action.payload)
-      state.items = state.items.map((item) => {
-        if (item.isbn === action.payload.isbn) {
-          return action.payload
-        }
-        return item
-        //item updated successfully but state not
-      })
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchBooksThunk.pending, (state, action) => {
       state.isLoading = true
@@ -120,7 +167,7 @@ export const booksSlice = createSlice({
       state.items = action.payload
     })
     //addBook
-    //adding authors reducers
+    //adding book reducers
     builder.addCase(addNewBookThunk.pending, (state, action) => {
       state.isLoading = true
     })
@@ -141,8 +188,50 @@ export const booksSlice = createSlice({
 
       //console.log('inside addnewauthorThunk reducer>payload: ', action.payload)
     })
+
+    //edit book thunk reducers
+    builder.addCase(editBookThunk.pending, (state) => {
+      state.isLoading = true
+    })
+
+    builder.addCase(editBookThunk.rejected, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
+      state.error = action.payload.data
+    })
+    builder.addCase(editBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      if (action.payload?.status == 200) {
+        state.error = null
+        state.items = state.items.map((item) => {
+          if (item.isbn === action.payload.data.isbn) {
+            return action.payload.data
+          }
+
+          return item
+        })
+      } else {
+        state.error = action.payload?.data
+      }
+      state.status = action.payload?.status
+    })
+
+    //delete book thunk reducers
+    builder.addCase(deleteBookThunk.pending, (state) => {
+      state.isLoading = true
+    })
+
+    builder.addCase(deleteBookThunk.rejected, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
+      state.error = action.payload.data
+    })
+    builder.addCase(deleteBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      if (action.payload?.status == 200) {
+        state.error = null
+        state.items = state.items.filter((prev) => prev.isbn !== action.payload.data)
+      } else {
+        state.error = action.payload?.data
+      }
+    })
   }
 })
 
-export const { addNewBook, deleteBook, editBook } = booksSlice.actions
 export default booksSlice.reducer

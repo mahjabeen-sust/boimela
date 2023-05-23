@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 
 import type { RootState, AppDispatch } from '../../store'
-import { editBook } from '../../features/books/booksSlice'
+//import { editBook } from '../../features/books/booksSlice'
 import UserNav from './UserNav'
 
 import Table from '@mui/material/Table'
@@ -29,16 +29,16 @@ const Borrowed = () => {
       isbn: bookToBeReturned?.isbn,
       title: bookToBeReturned?.title,
       description: bookToBeReturned?.description,
-      publisher: bookToBeReturned?.publisher,
-      authors: bookToBeReturned?.authors,
+      publisher: bookToBeReturned?.publishers,
+      authors: bookToBeReturned?.authorList,
       borrowerId: null,
-      publishDate: bookToBeReturned?.publishDate,
+      publishDate: bookToBeReturned?.publishedDate,
       status: true,
       borrowDate: null,
       returnDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/')
     }
 
-    dispatch(editBook(returnedBook as any))
+    //dispatch(editBook(returnedBook as any))
   }
   return (
     <Grid

@@ -11,12 +11,13 @@ import Grid from '@mui/material/Grid'
 
 import AdminNav from '../admin/AdminNav'
 import type { RootState, AppDispatch } from '../../store'
-import { fetchBooksThunk, deleteBook } from '../../features/books/booksSlice'
+import { fetchBooksThunk, deleteBookThunk } from '../../features/books/booksSlice'
 import EditBookForm from './EditBookForm'
 
 const BooksTable = () => {
   const { books } = useSelector((state: RootState) => state)
   const [updateBookIsbn, setUpdateBookIsbn] = useState<null | string>()
+  const [deleteBookIsbn, setDeleteBookIsbn] = useState<null | string>()
 
   //console.log('received book', book)
 
@@ -35,6 +36,11 @@ const BooksTable = () => {
   const handleEdit = (isbn: string) => {
     //alert(isbn)
     setUpdateBookIsbn(isbn)
+  }
+
+  const deleteAction = (isbn: string) => {
+    setDeleteBookIsbn(isbn)
+    dispatch(deleteBookThunk(isbn))
   }
 
   return (
@@ -57,7 +63,7 @@ const BooksTable = () => {
                 <TableCell>Publisher</TableCell>
                 <TableCell>Publish Date</TableCell>
                 <TableCell>Status</TableCell>
-                <TableCell>Borrower</TableCell>
+
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -65,11 +71,18 @@ const BooksTable = () => {
               {books.items.map((book) => (
                 <TableRow key={book.isbn}>
                   <TableCell>{book.title}</TableCell>
-                  <TableCell>{book.authors}</TableCell>
-                  <TableCell>{book.publisher}</TableCell>
-                  <TableCell>{book.publishDate}</TableCell>
-                  <TableCell>{book.status ? 'Available' : 'Borrowed'}</TableCell>
-                  <TableCell>{book.borrowerId}</TableCell>
+                  <TableCell>
+                    {book.authorList.map((author) => (
+                      <>
+                        <span key={author.id}>{author.name} </span>
+                        <br />
+                      </>
+                    ))}
+                  </TableCell>
+                  <TableCell>{book.publishers}</TableCell>
+                  <TableCell>{book.publishedDate}</TableCell>
+                  <TableCell>{book.status}</TableCell>
+
                   <TableCell>
                     <Button size="small" onClick={() => handleEdit(book.isbn)}>
                       Edit
@@ -77,10 +90,15 @@ const BooksTable = () => {
                     <Button
                       size="small"
                       onClick={() => {
-                        dispatch(deleteBook(book.isbn))
+                        deleteAction(book.isbn)
                       }}>
                       Delete
                     </Button>
+                    {books.error && deleteBookIsbn == book.isbn ? (
+                      <span className="error">{books.error}</span>
+                    ) : (
+                      ''
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

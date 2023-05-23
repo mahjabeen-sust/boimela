@@ -22,8 +22,8 @@ export type BookDTO = {
   title: string
   description: string
   publishers: string
-  categoryId: string
-  authorIdList: string[]
+  categoryId: string | number
+  authorIdList: string[] | number[]
   status: string
   publishedDate: string
 }

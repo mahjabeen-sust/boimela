@@ -112,7 +112,7 @@ export const editAuthorThunk = createAsyncThunk(
   }
 )
 
-//edit author thunk
+//delete author thunk
 export const deleteAuthorThunk = createAsyncThunk('authors/delete', async (id: number) => {
   const token = localStorage.getItem('token')
 
@@ -210,7 +210,7 @@ export const authorsSlice = createSlice({
       }
     })
 
-    //delet author thunk reducers
+    //delete author thunk reducers
     builder.addCase(deleteAuthorThunk.pending, (state) => {
       state.isLoading = true
     })
