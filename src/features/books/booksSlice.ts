@@ -8,12 +8,14 @@ export interface BookState {
   items: Book[]
   isLoading: boolean
   error: string | null
+  status: string | null
 }
 
 const initialState: BookState = {
   items: [],
   isLoading: false,
-  error: null
+  error: null,
+  status: null
 }
 
 //const BOOKS_PLACEHOLDER_API = 'http://localhost:3000/books-small.json'
@@ -135,6 +137,7 @@ export const booksSlice = createSlice({
       } else {
         state.error = action.payload?.data
       }
+      state.status = action.payload?.status
 
       //console.log('inside addnewauthorThunk reducer>payload: ', action.payload)
     })

@@ -17,6 +17,7 @@ import { Preview } from '@mui/icons-material'
 import { date } from 'zod'
 
 const BookForm = () => {
+  const { books } = useSelector((state: RootState) => state)
   const { authors } = useSelector((state: RootState) => state)
   const { categories } = useSelector((state: RootState) => state)
 
@@ -86,6 +87,7 @@ const BookForm = () => {
       newBook.authorIdList = checkboxes
       //console.log('newbook: ', newBook)
       dispatch(addNewBookThunk(newBook))
+
       //;<Link to="/adminDashboard">Go back to dashboard</Link>
     }
   }
@@ -238,6 +240,8 @@ const BookForm = () => {
             <Button variant="outlined" color="secondary" type="submit">
               Add New Book
             </Button>
+            {books.error ? <span className="error">{books.error}</span> : ''}
+            {books.status == '200' ? <span className="success">Book added Succesfully!</span> : ''}
           </form>
         </Grid>
       </Grid>

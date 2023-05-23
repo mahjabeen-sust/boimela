@@ -189,6 +189,12 @@ button:focus-visible {
   margin: 0 0 12px 0;
 }
 
+.success {
+  color: green;
+  display: block;
+  margin: 0 0 12px 0;
+}
+
 /* author list */
 
 ul.author-list {
