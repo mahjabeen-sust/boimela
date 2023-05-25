@@ -1,6 +1,3 @@
-import { useSelector } from 'react-redux'
-
-import type { RootState } from '../../store'
 import BorrowBook from '../book/BorrowBook'
 import UserNav from './UserNav'
 
@@ -8,7 +5,6 @@ import Grid from '@mui/material/Grid'
 
 export default function Dashboard() {
   // Select username from store
-  const user = useSelector((state: RootState) => state.auth.user.username)
 
   return (
     <div>

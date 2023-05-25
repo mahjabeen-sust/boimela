@@ -5,6 +5,7 @@ import booksReducer from './features/books/booksSlice'
 import authReducer from './features/login/authSlice'
 import authorReducer from './features/authors/authorsSlice'
 import categoryReducer from './features/category/categorySlice'
+import loanReducer from './features/books/loansSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ export const store = configureStore({
     //auth: userReducer,
     auth: authReducer,
     authors: authorReducer,
-    categories: categoryReducer
+    categories: categoryReducer,
+    loans: loanReducer
   }
 })
 

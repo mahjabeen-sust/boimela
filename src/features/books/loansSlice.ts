@@ -2,16 +2,16 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-import { Book, BookDTO, User } from '../../type'
+import { Book, BookDTO, User, Loan, loanDTO } from '../../type'
 
-export interface BookState {
-  items: Book[]
+export interface LoanState {
+  items: Loan[]
   isLoading: boolean
   error: string | null
   status: string | null
 }
 
-const initialState: BookState = {
+const initialState: LoanState = {
   items: [],
   isLoading: false,
   error: null,
@@ -24,20 +24,40 @@ const BOOKS_PLACEHOLDER_API = 'https://boimela.netlify.app/books-small.json'
 
 //ACTION
 
-export const fetchBooksThunk = createAsyncThunk('books/fetch', async (data, thunkApi) => {
-  try {
-    const response = await axios.get('http://localhost:8080/api/v1/books/')
-    const data: Book[] = await response.data
-    //console.log('Found books', data)
-    return data
-  } catch (error: any) {
-    return thunkApi.rejectWithValue(error.message)
+export const fetchLoansThunk = createAsyncThunk('loans/fetch', async (username: string | null) => {
+  //console.log('username inside loan thunk', username)
+  const token = localStorage.getItem('token')
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + token
+  }
+  const response = await axios
+    .get(`http://localhost:8080/api/v1/loan/${username}`, {
+      headers
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return {
+          status: error.response.status,
+          data: error.response.data
+        }
+      } else if (error.request) {
+        console.log('error.request > ', error.request)
+      } else {
+        console.log('Error', error.message)
+      }
+      console.log('error.config', error.config)
+    })
+  //console.log('response', response)
+  return {
+    status: response?.status,
+    data: response?.data
   }
 })
 
 //add new book thunk
-export const addNewBookThunk = createAsyncThunk('books/add', async (book: BookDTO) => {
-  //console.log(author)
+export const createLoanThunk = createAsyncThunk('loans/add', async (loan: loanDTO) => {
   const token = localStorage.getItem('token')
 
   const headers = {
@@ -47,51 +67,7 @@ export const addNewBookThunk = createAsyncThunk('books/add', async (book: BookDT
 
   // Make the Axios request
   const response = await axios
-    .post('http://localhost:8080/api/v1/books/', book, {
-      headers
-    })
-    .catch(function (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        // console.log('error.response.data > ', error.response.data)
-        // console.log('error.response.status > ', error.response.status)
-        // console.log('error.response.headers > ', error.response.headers)
-
-        return {
-          status: error.response.status,
-          data: error.response.data
-        }
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log('error.request > ', error.request)
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message)
-      }
-      console.log('error.config', error.config)
-    })
-  //console.log('response', response)
-  return {
-    status: response?.status,
-    data: response?.data
-  }
-})
-
-//edit book thunk
-export const editBookThunk = createAsyncThunk('books/edit', async (book: BookDTO) => {
-  const token = localStorage.getItem('token')
-
-  const headers = {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer ' + token
-  }
-
-  // Make the Axios request
-  const response = await axios
-    .put(`http://localhost:8080/api/v1/books/${book.isbn}`, book, {
+    .post('http://localhost:8080/api/v1/loan/', loan, {
       headers
     })
     .catch(function (error) {
@@ -107,15 +83,15 @@ export const editBookThunk = createAsyncThunk('books/edit', async (book: BookDTO
       }
       console.log('error.config', error.config)
     })
-  //console.log('response', response)
+
   return {
     status: response?.status,
     data: response?.data
   }
 })
 
-//delete book thunk
-export const deleteBookThunk = createAsyncThunk('books/delete', async (isbn: string) => {
+//return loan thunk
+export const returnLoanThunk = createAsyncThunk('loans/return', async (id: string) => {
   const token = localStorage.getItem('token')
 
   const headers = {
@@ -125,11 +101,10 @@ export const deleteBookThunk = createAsyncThunk('books/delete', async (isbn: str
 
   // Make the Axios request
   const response = await axios
-    .delete(`http://localhost:8080/api/v1/books/${isbn}`, {
-      headers
-    })
+    .put(`http://localhost:8080/api/v1/loan/${id}`, { headers })
     .catch(function (error) {
       if (error.response) {
+        console.log('error.response > ', error.response)
         return {
           status: error.response.status,
           data: error.response.data
@@ -149,37 +124,50 @@ export const deleteBookThunk = createAsyncThunk('books/delete', async (isbn: str
 })
 
 //SLICE
-export const booksSlice = createSlice({
-  name: 'books',
+export const loansSlice = createSlice({
+  name: 'loans',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchBooksThunk.pending, (state, action) => {
+    builder.addCase(fetchLoansThunk.pending, (state, action) => {
       state.isLoading = true
     })
-    builder.addCase(fetchBooksThunk.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(fetchLoansThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
       //state.error = action.payload
       state.error = 'Something went wrong ...'
     })
-    builder.addCase(fetchBooksThunk.fulfilled, (state, action: PayloadAction<Book[]>) => {
-      state.isLoading = false
-      state.items = action.payload
+    builder.addCase(fetchLoansThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      if (action.payload?.status == 200) {
+        state.isLoading = false
+        state.items = action.payload.data
+        state.error = null
+      } else {
+        state.error = action.payload?.data
+      }
+      state.status = action.payload?.status
     })
-    //addBook
-    //adding book reducers
-    builder.addCase(addNewBookThunk.pending, (state, action) => {
+
+    //return loan reducers
+    builder.addCase(returnLoanThunk.pending, (state, action) => {
       state.isLoading = true
     })
 
-    builder.addCase(addNewBookThunk.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(returnLoanThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
       state.error = action.payload
+      console.log('rejected', action.payload)
       //state.error = 'Something went wrong ...'
     })
-    builder.addCase(addNewBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(returnLoanThunk.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload?.status == 200) {
-        state.items = [action.payload.data, ...state.items]
+        state.items = state.items.map((item) => {
+          if (item.id === action.payload.data.id) {
+            return action.payload.data
+          }
+
+          return item
+        })
         state.error = null
       } else {
         state.error = action.payload?.data
@@ -189,49 +177,25 @@ export const booksSlice = createSlice({
       //console.log('inside addnewauthorThunk reducer>payload: ', action.payload)
     })
 
-    //edit book thunk reducers
-    builder.addCase(editBookThunk.pending, (state) => {
+    //create reducers
+    builder.addCase(createLoanThunk.pending, (state) => {
       state.isLoading = true
     })
 
-    builder.addCase(editBookThunk.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(createLoanThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false
       state.error = action.payload.data
     })
-    builder.addCase(editBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(createLoanThunk.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload?.status == 200) {
         state.error = null
-        state.items = state.items.map((item) => {
-          if (item.isbn === action.payload.data.isbn) {
-            return action.payload.data
-          }
-
-          return item
-        })
+        state.items = [action.payload.data, ...state.items]
       } else {
         state.error = action.payload?.data
       }
       state.status = action.payload?.status
     })
-
-    //delete book thunk reducers
-    builder.addCase(deleteBookThunk.pending, (state) => {
-      state.isLoading = true
-    })
-
-    builder.addCase(deleteBookThunk.rejected, (state, action: PayloadAction<any>) => {
-      state.isLoading = false
-      state.error = action.payload.data
-    })
-    builder.addCase(deleteBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
-      if (action.payload?.status == 200) {
-        state.error = null
-        state.items = state.items.filter((prev) => prev.isbn !== action.payload.data)
-      } else {
-        state.error = action.payload?.data
-      }
-    })
   }
 })
 
-export default booksSlice.reducer
+export default loansSlice.reducer

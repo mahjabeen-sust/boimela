@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 import type { RootState, AppDispatch } from '../../store'
 //import { editBook } from '../../features/books/booksSlice'
+import { fetchLoansThunk, returnLoanThunk } from '../../features/books/loansSlice'
 import UserNav from './UserNav'
 
 import Table from '@mui/material/Table'
@@ -13,33 +15,20 @@ import TableRow from '@mui/material/TableRow'
 import Grid from '@mui/material/Grid'
 
 const Borrowed = () => {
-  const { books } = useSelector((state: RootState) => state)
-  const loggedInUser = useSelector((state: RootState) => state.auth.loggedInUser)
+  const user = useSelector((state: RootState) => state.auth.user.username)
+  const { loans } = useSelector((state: RootState) => state)
+  //console.log('loans > ', loans)
+
   const dispatch = useDispatch<AppDispatch>()
 
-  const borrowedBook = books.items.filter((item) => item.borrowerId === loggedInUser?.email)
-
-  const returnBook = (isbn: string) => {
-    const bookToBeReturned = books.items.find((book) => {
-      if (book.isbn === isbn) return book
-    })
-
-    //a new object for returning book
-    const returnedBook = {
-      isbn: bookToBeReturned?.isbn,
-      title: bookToBeReturned?.title,
-      description: bookToBeReturned?.description,
-      publisher: bookToBeReturned?.publishers,
-      authors: bookToBeReturned?.authorList,
-      borrowerId: null,
-      publishDate: bookToBeReturned?.publishedDate,
-      status: true,
-      borrowDate: null,
-      returnDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/')
-    }
-
-    //dispatch(editBook(returnedBook as any))
+  const returnBook = (id: string) => {
+    dispatch(returnLoanThunk(id))
   }
+
+  useEffect(() => {
+    dispatch(fetchLoansThunk(user))
+  }, [])
+
   return (
     <Grid
       container
@@ -50,37 +39,54 @@ const Borrowed = () => {
         <UserNav />
       </Grid>
       <Grid item xs={9} className="pl-24">
-        {borrowedBook && (
-          <>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Authors</TableCell>
-                  <TableCell>Publisher</TableCell>
-                  <TableCell>Borrow Date</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {borrowedBook.map((book) => (
-                  <TableRow key={book.isbn}>
-                    <TableCell>{book.title}</TableCell>
-                    <TableCell>{book.authors}</TableCell>
-                    <TableCell>{book.publisher}</TableCell>
-                    <TableCell>{book.borrowDate?.toString()}</TableCell>
+        <span>{loans.error}</span>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Title</TableCell>
+              <TableCell>Category</TableCell>
+              <TableCell>Authors</TableCell>
+              <TableCell>Borrow Date</TableCell>
+              <TableCell>Return Date</TableCell>
+              <TableCell>Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {loans.items.map((loan) => (
+              <TableRow key={loan.id}>
+                <TableCell>{loan.book.title}</TableCell>
+                <TableCell>{loan.book.category.name}</TableCell>
+                <TableCell>
+                  {loan.book.authorList.map((author) => (
+                    <>
+                      <span key={author.id}>{author.name} </span>
+                      <br />
+                    </>
+                  ))}
+                </TableCell>
+                <TableCell>{loan.borrowDate}</TableCell>
+                <TableCell>{loan.returnDate}</TableCell>
 
-                    <TableCell>
-                      <Button size="small" type="button" onClick={() => returnBook(book.isbn)}>
-                        Return
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </>
-        )}
+                <TableCell>
+                  {/* <Button size="small" type="button" onClick={() => returnBook(loan.id)}>
+                    Return
+                  </Button> */}
+                  {loan.loanStatus == 'INDEBT' ? (
+                    <Button
+                      size="small"
+                      variant="contained"
+                      type="button"
+                      onClick={() => returnBook(loan.id)}>
+                      Return
+                    </Button>
+                  ) : (
+                    'RETURNED'
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </Grid>
     </Grid>
   )

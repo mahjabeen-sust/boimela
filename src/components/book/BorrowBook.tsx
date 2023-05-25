@@ -14,7 +14,8 @@ import styled from '@mui/system/styled'
 
 import type { RootState, AppDispatch } from '../../store'
 import { fetchBooksThunk } from '../../features/books/booksSlice'
-import { Book } from '../../type'
+import { fetchLoansThunk, createLoanThunk } from '../../features/books/loansSlice'
+import { Book, loanDTO } from '../../type'
 
 const Item = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -38,31 +39,17 @@ const BorrowBook = () => {
   }, [])
 
   const borrow = (isbn: string) => {
-    //console.log('isbn', isbn)
-
-    //find the book to be borrowed
-    const bookToBeBorrowed = books.items.find((book) => {
-      if (book.isbn === isbn) return book
-    })
-    //console.log('book to be borrowed:', bookToBeBorrowed)
-
-    const borrowedBook = {
-      isbn: bookToBeBorrowed?.isbn,
-      title: bookToBeBorrowed?.title,
-      description: bookToBeBorrowed?.description,
-      publishers: bookToBeBorrowed?.publishers,
-      authors: bookToBeBorrowed?.authorList,
-      status: false,
-      publishDate: bookToBeBorrowed?.publishedDate,
-      borrowerId: loggedInUser,
+    const loanDTO: loanDTO = {
+      bookIsbn: isbn,
+      username: loggedInUser,
       borrowDate: new Date().toISOString().slice(0, 10).replace('/-/gi', '/'),
-      returnDate: null
+      loanStatus: 'INDEBT'
     }
 
     //console.log('book to be borrowed:', borrowedBook)
     //dispatch the borrowBook
 
-    //dispatch(editBook(borrowedBook as any))
+    dispatch(createLoanThunk(loanDTO))
   }
 
   return (
@@ -97,7 +84,7 @@ const BorrowBook = () => {
                   </Typography>
 
                   <Typography gutterBottom variant="button" component="span">
-                    {book.status ? (
+                    {book.status == 'AVAILABLE' ? (
                       <Button
                         size="small"
                         variant="contained"
@@ -106,7 +93,7 @@ const BorrowBook = () => {
                         Borrow
                       </Button>
                     ) : (
-                      'Borrowed'
+                      'BORROWED'
                     )}
                   </Typography>
                 </CardContent>

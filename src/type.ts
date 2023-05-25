@@ -37,3 +37,18 @@ export type Category = {
   id: number
   name: string
 }
+export type Loan = {
+  id: string
+  user: User
+  book: Book
+  borrowDate: string
+  returnDate: string
+  loanStatus: string
+}
+
+export type loanDTO = {
+  bookIsbn: string | undefined
+  username: string | null
+  borrowDate: string
+  loanStatus: string
+}
