@@ -56,7 +56,7 @@ export const fetchLoansThunk = createAsyncThunk('loans/fetch', async (username: 
   }
 })
 
-//add new book thunk
+//add loan thunk
 export const createLoanThunk = createAsyncThunk('loans/add', async (loan: loanDTO) => {
   const token = localStorage.getItem('token')
 
@@ -91,9 +91,11 @@ export const createLoanThunk = createAsyncThunk('loans/add', async (loan: loanDT
 })
 
 //return loan thunk
+
 export const returnLoanThunk = createAsyncThunk('loans/return', async (id: string) => {
   const token = localStorage.getItem('token')
-
+  //console.log('Sent token >', token)
+  const emptyBody = 'test text'
   const headers = {
     'Content-Type': 'application/json',
     Authorization: 'Bearer ' + token
@@ -101,10 +103,12 @@ export const returnLoanThunk = createAsyncThunk('loans/return', async (id: strin
 
   // Make the Axios request
   const response = await axios
-    .put(`http://localhost:8080/api/v1/loan/${id}`, { headers })
+    .put(`http://localhost:8080/api/v1/loan/${id}`, emptyBody, {
+      headers
+    })
     .catch(function (error) {
+      console.log('error.response > ', error.response)
       if (error.response) {
-        console.log('error.response > ', error.response)
         return {
           status: error.response.status,
           data: error.response.data
@@ -161,6 +165,7 @@ export const loansSlice = createSlice({
     })
     builder.addCase(returnLoanThunk.fulfilled, (state, action: PayloadAction<any>) => {
       if (action.payload?.status == 200) {
+        //console.log('returnLoan fulfilled!')
         state.items = state.items.map((item) => {
           if (item.id === action.payload.data.id) {
             return action.payload.data
@@ -171,6 +176,7 @@ export const loansSlice = createSlice({
         state.error = null
       } else {
         state.error = action.payload?.data
+        console.log('state error > ', state.error)
       }
       state.status = action.payload?.status
 
