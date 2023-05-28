@@ -104,7 +104,7 @@ export const authSlice = createSlice({
         state.error = 'Username not found! Please sign up!'
         state.user.username = null
       } else if (token === '401 UNAUTHORIZED') {
-        state.error = 'Password Does Not Match!'
+        state.error = 'Wrong Username or Password!'
         state.user.username = null
       } else {
         state.error = null
