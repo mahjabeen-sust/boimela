@@ -8,7 +8,7 @@ import Books from '../book/Books'
 
 export default function AdminDashboard() {
   // Select username from store
-  const user = useSelector((state: RootState) => state.auth.loggedInUser)
+  const user = useSelector((state: RootState) => state.auth.user.username)
 
   return (
     <div>
