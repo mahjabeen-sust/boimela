@@ -53,8 +53,8 @@ const BooksTable = () => {
         <Grid item xs={3}>
           <AdminNav />
         </Grid>
-        {books.isLoading ? <span>Loading .... </span> : ''}
         <Grid item xs={9} className="pl-24">
+          {books.isLoading ? <span>Loading .... </span> : ''}
           <Table size="small">
             <TableHead>
               <TableRow>

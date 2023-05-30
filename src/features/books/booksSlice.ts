@@ -178,6 +178,7 @@ export const booksSlice = createSlice({
       //state.error = 'Something went wrong ...'
     })
     builder.addCase(addNewBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
       if (action.payload?.status == 200) {
         state.items = [action.payload.data, ...state.items]
         state.error = null
@@ -199,6 +200,7 @@ export const booksSlice = createSlice({
       state.error = action.payload.data
     })
     builder.addCase(editBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
       if (action.payload?.status == 200) {
         state.error = null
         state.items = state.items.map((item) => {
@@ -224,6 +226,7 @@ export const booksSlice = createSlice({
       state.error = action.payload.data
     })
     builder.addCase(deleteBookThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
       if (action.payload?.status == 200) {
         state.error = null
         state.items = state.items.filter((prev) => prev.isbn !== action.payload.data)
