@@ -16,13 +16,10 @@ const initialState: authorState = {
   error: null
 }
 
-//const AUTHORS_PLACEHOLDER_API = 'http://localhost:3000/authors.json'
-const AUTHORS_PLACEHOLDER_API = 'https://boimela.netlify.app/authors.json'
-
-// axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL || 'https://pmapi.bluewindlab.com'
+const API_PLACEHOLDER = import.meta.env.VITE_API_ORIGIN
 
 export const fetchAuthorsThunk = createAsyncThunk('authors/fetch', async () => {
-  const response = await axios.get('http://localhost:8080/api/v1/authors/')
+  const response = await axios.get(`${API_PLACEHOLDER}/api/v1/authors/`)
   const data: Author[] = await response.data
   //console.log('Found authors', data)
   return data
@@ -41,7 +38,7 @@ export const addNewAuthorThunk = createAsyncThunk(
 
     // Make the Axios request
     const response = await axios
-      .post('http://localhost:8080/api/v1/authors/', author, {
+      .post(`${API_PLACEHOLDER}/api/v1/authors/`, author, {
         headers
       })
       .catch(function (error) {
@@ -88,7 +85,7 @@ export const editAuthorThunk = createAsyncThunk(
 
     // Make the Axios request
     const response = await axios
-      .put(`http://localhost:8080/api/v1/authors/${author.id}`, author, {
+      .put(`${API_PLACEHOLDER}/api/v1/authors/${author.id}`, author, {
         headers
       })
       .catch(function (error) {
@@ -123,7 +120,7 @@ export const deleteAuthorThunk = createAsyncThunk('authors/delete', async (id: n
 
   // Make the Axios request
   const response = await axios
-    .delete(`http://localhost:8080/api/v1/authors/${id}`, {
+    .delete(`${API_PLACEHOLDER}/api/v1/authors/${id}`, {
       headers
     })
     .catch(function (error) {

@@ -35,11 +35,13 @@ const initialState: UserState = {
   registerStatus: null
 }
 
+const API_PLACEHOLDER = import.meta.env.VITE_API_ORIGIN
+
 export const signUpThunk = createAsyncThunk(
   'auth/signup',
   async (user: { username: string; password: string }) => {
     console.log(user)
-    const res = await axios.post('http://localhost:8080/signup', user)
+    const res = await axios.post(`${API_PLACEHOLDER}/signup`, user)
 
     console.log('res', res)
     return res.data
@@ -48,7 +50,7 @@ export const signUpThunk = createAsyncThunk(
 export const signInThunk = createAsyncThunk(
   'auth/signin',
   async (user: { username: string; password: string }) => {
-    const res = await axios.post('http://localhost:8080/signin', user)
+    const res = await axios.post(`${API_PLACEHOLDER}/signin`, user)
     console.log('token', res.data)
     return {
       token: res.data

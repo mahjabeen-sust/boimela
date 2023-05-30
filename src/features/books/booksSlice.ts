@@ -18,15 +18,14 @@ const initialState: BookState = {
   status: null
 }
 
-//const BOOKS_PLACEHOLDER_API = 'http://localhost:3000/books-small.json'
-// const BOOKS_PLACEHOLDER_API = 'https://github.com/mahjabeen-sust/boimela/books-small.json'
-const BOOKS_PLACEHOLDER_API = 'https://boimela.netlify.app/books-small.json'
+const API_PLACEHOLDER = import.meta.env.VITE_API_ORIGIN
+//console.log('api placeholder', API_PLACEHOLDER)
 
 //ACTION
 
 export const fetchBooksThunk = createAsyncThunk('books/fetch', async (data, thunkApi) => {
   try {
-    const response = await axios.get('http://localhost:8080/api/v1/books/')
+    const response = await axios.get(`${API_PLACEHOLDER}/api/v1/books/`)
     const data: Book[] = await response.data
     //console.log('Found books', data)
     return data
@@ -47,7 +46,7 @@ export const addNewBookThunk = createAsyncThunk('books/add', async (book: BookDT
 
   // Make the Axios request
   const response = await axios
-    .post('http://localhost:8080/api/v1/books/', book, {
+    .post(`${API_PLACEHOLDER}/api/v1/books/`, book, {
       headers
     })
     .catch(function (error) {
@@ -91,7 +90,7 @@ export const editBookThunk = createAsyncThunk('books/edit', async (book: BookDTO
 
   // Make the Axios request
   const response = await axios
-    .put(`http://localhost:8080/api/v1/books/${book.isbn}`, book, {
+    .put(`${API_PLACEHOLDER}/api/v1/books/${book.isbn}`, book, {
       headers
     })
     .catch(function (error) {
@@ -125,7 +124,7 @@ export const deleteBookThunk = createAsyncThunk('books/delete', async (isbn: str
 
   // Make the Axios request
   const response = await axios
-    .delete(`http://localhost:8080/api/v1/books/${isbn}`, {
+    .delete(`${API_PLACEHOLDER}/api/v1/books/${isbn}`, {
       headers
     })
     .catch(function (error) {

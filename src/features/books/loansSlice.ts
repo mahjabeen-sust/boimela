@@ -18,9 +18,7 @@ const initialState: LoanState = {
   status: null
 }
 
-//const BOOKS_PLACEHOLDER_API = 'http://localhost:3000/books-small.json'
-// const BOOKS_PLACEHOLDER_API = 'https://github.com/mahjabeen-sust/boimela/books-small.json'
-const BOOKS_PLACEHOLDER_API = 'https://boimela.netlify.app/books-small.json'
+const API_PLACEHOLDER = import.meta.env.VITE_API_ORIGIN
 
 //ACTION
 
@@ -33,7 +31,7 @@ export const fetchLoansThunk = createAsyncThunk('loans/fetch', async (username: 
     Authorization: 'Bearer ' + token
   }
   const response = await axios
-    .get(`http://localhost:8080/api/v1/loan/${username}`, {
+    .get(`${API_PLACEHOLDER}/api/v1/loan/${username}`, {
       headers
     })
     .catch(function (error) {
@@ -67,7 +65,7 @@ export const createLoanThunk = createAsyncThunk('loans/add', async (loan: loanDT
 
   // Make the Axios request
   const response = await axios
-    .post('http://localhost:8080/api/v1/loan/', loan, {
+    .post(`${API_PLACEHOLDER}/api/v1/loan/`, loan, {
       headers
     })
     .catch(function (error) {
@@ -103,7 +101,7 @@ export const returnLoanThunk = createAsyncThunk('loans/return', async (id: strin
 
   // Make the Axios request
   const response = await axios
-    .put(`http://localhost:8080/api/v1/loan/${id}`, emptyBody, {
+    .put(`${API_PLACEHOLDER}/api/v1/loan/${id}`, emptyBody, {
       headers
     })
     .catch(function (error) {

@@ -16,12 +16,10 @@ const initialState: categoryState = {
   error: null
 }
 
-//const categoryS_PLACEHOLDER_API = 'http://localhost:3000/categorys.json'
-
-// axios.defaults.baseURL = process.env.REACT_APP_BACKENDURL || 'https://pmapi.bluewindlab.com'
+const API_PLACEHOLDER = import.meta.env.VITE_API_ORIGIN
 
 export const fetchCategoryThunk = createAsyncThunk('categories/fetch', async () => {
-  const response = await axios.get('http://localhost:8080/api/v1/categories/')
+  const response = await axios.get(`${API_PLACEHOLDER}/api/v1/categories/`)
   const data: Category[] = await response.data
   //console.log('Found categorys', data)
   return data
@@ -40,7 +38,7 @@ export const addNewCategoryThunk = createAsyncThunk(
 
     // Make the Axios request
     const response = await axios
-      .post('http://localhost:8080/api/v1/categories/', category, {
+      .post(`${API_PLACEHOLDER}/api/v1/categories/`, category, {
         headers
       })
       .catch(function (error) {
@@ -87,7 +85,7 @@ export const editCategoryThunk = createAsyncThunk(
 
     // Make the Axios request
     const response = await axios
-      .put(`http://localhost:8080/api/v1/categories/${category.id}`, category, {
+      .put(`${API_PLACEHOLDER}/api/v1/categories/${category.id}`, category, {
         headers
       })
       .catch(function (error) {
@@ -122,7 +120,7 @@ export const deleteCategoryThunk = createAsyncThunk('categories/delete', async (
 
   // Make the Axios request
   const response = await axios
-    .delete(`http://localhost:8080/api/v1/categories/${id}`, {
+    .delete(`${API_PLACEHOLDER}/api/v1/categories/${id}`, {
       headers
     })
     .catch(function (error) {
