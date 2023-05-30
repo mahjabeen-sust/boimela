@@ -14,7 +14,7 @@ import AuthorForm from './components/author/AuthorForm'
 import EditAuthor from './components/author/EditAuthor'
 import CategoryForm from './components/category/CategoryForm'
 import EditCategory from './components/category/EditCategory'
-import UsersList from './components/user/UsersList'
+
 import Books from './components/book/Books'
 import BooksTable from './components/book/BooksTable'
 import Borrowed from './components/user/Borrowed'
@@ -71,7 +71,6 @@ function App() {
                 <Route path="/updateAuthor" element={<EditAuthor />} />
                 <Route path="/addCategory" element={<CategoryForm />} />
                 <Route path="/updateCategory" element={<EditCategory />} />
-                <Route path="/manageUser" element={<UsersList />} />
               </Route>
             </Routes>
           </Wrapper>
