@@ -16,7 +16,7 @@ import Grid from '@mui/material/Grid'
 
 const Borrowed = () => {
   const { loans } = useSelector((state: RootState) => state)
-  console.log('loans > ', loans)
+  //console.log('loans > ', loans)
 
   const dispatch = useDispatch<AppDispatch>()
 

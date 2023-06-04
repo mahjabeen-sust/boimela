@@ -65,7 +65,7 @@ const Books = () => {
                   Publisher :{book.publishers}
                 </Typography>
                 <Typography gutterBottom component="span">
-                  {book.status ? 'Available' : 'Borrowed'}
+                  {book.status}
                 </Typography>
               </CardContent>
             </Card>
