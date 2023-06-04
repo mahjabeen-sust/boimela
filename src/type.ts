@@ -1,9 +1,7 @@
 export type User = {
-  firstName: string
-  lastName: string
-  email: string
+  username: string
   password: string
-  isAdmin: boolean
+  role: string
 }
 
 export type Book = {
@@ -39,7 +37,7 @@ export type Category = {
 }
 export type Loan = {
   id: string
-  user: User
+  loanUser: User
   book: Book
   borrowDate: string
   returnDate: string

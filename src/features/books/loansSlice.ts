@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-import { Book, BookDTO, User, Loan, loanDTO } from '../../type'
+import { Loan, loanDTO } from '../../type'
 
 export interface LoanState {
   items: Loan[]
@@ -19,6 +19,38 @@ const initialState: LoanState = {
 }
 
 const API_PLACEHOLDER = import.meta.env.VITE_API_ORIGIN
+
+//fetching all loans for admin
+export const fetchAllLoansForAdminThunk = createAsyncThunk('loans/fetchAll', async () => {
+  const token = localStorage.getItem('token')
+
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer ' + token
+  }
+  const response = await axios
+    .get(`${API_PLACEHOLDER}/api/v1/loan/all`, {
+      headers
+    })
+    .catch(function (error) {
+      if (error.response) {
+        return {
+          status: error.response.status,
+          data: error.response.data
+        }
+      } else if (error.request) {
+        console.log('error.request > ', error.request)
+      } else {
+        console.log('Error', error.message)
+      }
+      console.log('error.config', error.config)
+    })
+  //console.log('response', response)
+  return {
+    status: response?.status,
+    data: response?.data
+  }
+})
 
 //ACTION
 
@@ -131,6 +163,22 @@ export const loansSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    //all loans for admin
+    builder.addCase(fetchAllLoansForAdminThunk.pending, (state, action) => {
+      state.isLoading = true
+    })
+    builder.addCase(fetchAllLoansForAdminThunk.rejected, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
+      //state.error = action.payload
+      state.error = 'Something went wrong ...'
+    })
+    builder.addCase(fetchAllLoansForAdminThunk.fulfilled, (state, action: PayloadAction<any>) => {
+      state.isLoading = false
+      state.items = action.payload.data
+      state.error = null
+    })
+
+    //loans for users
     builder.addCase(fetchLoansThunk.pending, (state, action) => {
       state.isLoading = true
     })

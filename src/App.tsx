@@ -19,7 +19,7 @@ import Books from './components/book/Books'
 import BooksTable from './components/book/BooksTable'
 import Borrowed from './components/user/Borrowed'
 import SignUp from './components/shared/SignUp'
-//import SignIn from './components/shared/SignInMUI'
+import Loans from './components/admin/Loans'
 
 /**
  * https://stackoverflow.com/questions/71885505/react-router-v6-no-routes-matched-location
@@ -71,6 +71,7 @@ function App() {
                 <Route path="/updateAuthor" element={<EditAuthor />} />
                 <Route path="/addCategory" element={<CategoryForm />} />
                 <Route path="/updateCategory" element={<EditCategory />} />
+                <Route path="/allLoans" element={<Loans />} />
               </Route>
             </Routes>
           </Wrapper>

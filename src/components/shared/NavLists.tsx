@@ -74,14 +74,14 @@ export const AdminNavLists = (
         <ListItemText primary="Update Category" />
       </Link>
     </ListItemButton>
-    {/* <ListItemButton>
+    <ListItemButton>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <Link to="/manageUser">
-        <ListItemText primary="User Lists" />
+      <Link to="/allLoans">
+        <ListItemText primary="All Loans" />
       </Link>
-    </ListItemButton> */}
+    </ListItemButton>
   </React.Fragment>
 )
 
