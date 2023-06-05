@@ -1,4 +1,5 @@
 import BorrowBook from '../book/BorrowBook'
+import SearchBook from './SearchBook'
 import UserNav from './UserNav'
 
 import Grid from '@mui/material/Grid'
@@ -17,7 +18,8 @@ export default function Dashboard() {
           <UserNav />
         </Grid>
         <Grid item xs={9} className="pl-24">
-          <BorrowBook />
+          {/* <BorrowBook /> */}
+          <SearchBook />
         </Grid>
       </Grid>
     </div>

@@ -9,13 +9,17 @@ export interface BookState {
   isLoading: boolean
   error: string | null
   status: string | null
+  searchQuery: string
+  filterCriteria: string
 }
 
 const initialState: BookState = {
   items: [],
   isLoading: false,
   error: null,
-  status: null
+  status: null,
+  searchQuery: '',
+  filterCriteria: ''
 }
 
 const API_PLACEHOLDER = import.meta.env.VITE_API_ORIGIN
@@ -151,7 +155,14 @@ export const deleteBookThunk = createAsyncThunk('books/delete', async (isbn: str
 export const booksSlice = createSlice({
   name: 'books',
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload
+    },
+    setFilterCriteria: (state, action: PayloadAction<string>) => {
+      state.filterCriteria = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchBooksThunk.pending, (state, action) => {
       state.isLoading = true
@@ -236,4 +247,5 @@ export const booksSlice = createSlice({
   }
 })
 
+export const { setSearchQuery, setFilterCriteria } = booksSlice.actions
 export default booksSlice.reducer

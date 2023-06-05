@@ -100,12 +100,12 @@ export default function UserNav() {
           {/* <IconButton onClick={toggleDrawer}>
             <ChevronLeftIcon />
           </IconButton> */}
-          <Search>
+          {/* <Search>
             <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
             <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
               <SearchIcon />
             </IconButton>
-          </Search>
+          </Search> */}
         </Toolbar>
         <Divider />
         <List component="nav">
