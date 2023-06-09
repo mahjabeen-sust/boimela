@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -7,6 +7,7 @@ import { loadUserFromStorage } from './features/login/authSlice'
 import SignIn from './components/shared/SignIn'
 import Dashboard from './components/user/Dashboard'
 import ProtectedRoute from './routing/ProtectedRoute'
+import AdminRoutes from './routing/AdminRoutes'
 import LoginControl from './components/shared/LoginControl'
 import AdminDashboard from './components/admin/AdminDashboard'
 import BookForm from './components/book/BookForm'
@@ -61,17 +62,17 @@ function App() {
               <Route path="/logout" element={<Logout />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
-
                 <Route path="/borrowedBooks" element={<Borrowed />} />
-                <Route path="/adminDashboard" element={<AdminDashboard />} />
-                <Route path="/addBook" element={<BookForm />} />
-
-                <Route path="/updateBook" element={<BooksTable />} />
-                <Route path="/addAuthor" element={<AuthorForm />} />
-                <Route path="/updateAuthor" element={<EditAuthor />} />
-                <Route path="/addCategory" element={<CategoryForm />} />
-                <Route path="/updateCategory" element={<EditCategory />} />
-                <Route path="/allLoans" element={<Loans />} />
+                <Route element={<AdminRoutes />}>
+                  <Route path="/adminDashboard" element={<AdminDashboard />} />
+                  <Route path="/addBook" element={<BookForm />} />
+                  <Route path="/updateBook" element={<BooksTable />} />
+                  <Route path="/addAuthor" element={<AuthorForm />} />
+                  <Route path="/updateAuthor" element={<EditAuthor />} />
+                  <Route path="/addCategory" element={<CategoryForm />} />
+                  <Route path="/updateCategory" element={<EditCategory />} />
+                  <Route path="/allLoans" element={<Loans />} />
+                </Route>
               </Route>
             </Routes>
           </Wrapper>

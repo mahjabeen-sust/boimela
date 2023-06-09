@@ -1,4 +1,5 @@
 import { useSelector } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 
 import Grid from '@mui/material/Grid'
 
@@ -8,8 +9,16 @@ import Books from '../book/Books'
 
 export default function AdminDashboard() {
   // Select username from store
-  const user = useSelector((state: RootState) => state.auth.user.username)
+  const user = useSelector((state: RootState) => state.auth.user)
 
+  // return user.role === 'USER' ? (
+  //   <div className="unauthorized">
+  //     <h1>Unauthorized</h1>
+  //     <span>
+  //       <NavLink to="/dashboard">Go to User DashBoard</NavLink>
+  //     </span>
+  //   </div>
+  // ) : (
   return (
     <div>
       {/* <h1>Admin Dashboard</h1>

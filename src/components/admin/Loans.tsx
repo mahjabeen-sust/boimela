@@ -14,7 +14,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Grid from '@mui/material/Grid'
 
-const Borrowed = () => {
+const Loans = () => {
   const { loans } = useSelector((state: RootState) => state)
   //console.log('loans > ', loans)
 
@@ -70,4 +70,4 @@ const Borrowed = () => {
   )
 }
 
-export default Borrowed
+export default Loans

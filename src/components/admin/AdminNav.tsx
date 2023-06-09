@@ -60,7 +60,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   })
 )
 
-export default function AdminDashboard() {
+export default function AdminNav() {
   const [open, setOpen] = useState(true)
   const toggleDrawer = () => {
     setOpen(!open)

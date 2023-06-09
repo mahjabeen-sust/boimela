@@ -10,7 +10,7 @@ import { Category } from '../../type'
 import { TextField, Button } from '@mui/material'
 import Grid from '@mui/material/Grid'
 
-export default function EditcategoryForm(props: Category) {
+export default function EditCategoryForm(props: Category) {
   const dispatch = useDispatch<AppDispatch>()
   const { categories } = useSelector((state: RootState) => state)
   //console.log('Received as props:', props)

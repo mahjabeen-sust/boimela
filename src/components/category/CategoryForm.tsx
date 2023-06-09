@@ -15,7 +15,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Grid from '@mui/material/Grid'
 
-export default function categoryForm() {
+export default function CategoryForm() {
   const dispatch = useDispatch<AppDispatch>()
   const { categories } = useSelector((state: RootState) => state)
 
